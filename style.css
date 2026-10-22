@@ -27,7 +27,7 @@ body {
   position: fixed;
   inset: 0;
   background-image: url("bg.png");
-  background-size: cover;
+  background-size: 80%;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.75;
