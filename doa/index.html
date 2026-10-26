@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <script data-goatcounter="https://setyabun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#9f1717">
+  <title>Doa Mohon Rahmat Natal 2026</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #fdfaf6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.75;
+      font-size: 17px;
+    }
+
+    /* ========== HEADER ========== */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 12px 16px 16px;
+      background: linear-gradient(180deg, #b71c1c 0%, #a71919 100%);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .salib {
+      display: block;
+      width: auto;
+      height: 52px;
+      max-width: 90%;
+      object-fit: contain;
+      margin: 0 auto 8px;
+      opacity: 0.92;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.25rem, 5vw, 1.7rem);
+      line-height: 1.25;
+      letter-spacing: 0.4px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: clamp(0.9rem, 3.4vw, 1.05rem);
+      line-height: 1.35;
+      opacity: 0.95;
+    }
+
+
+    /* ========== THERESIA FIXED ========== */
+
+    /*
+      Theresia tetap menempel di kanan layar
+      ketika halaman di-scroll.
+    */
+    .theresia-sticky {
+      position: fixed;
+      top: 110px;
+      right: 12px;
+      width: 78px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .theresia-sticky img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.18));
+      opacity: 0.92;
+    }
+
+
+    /* ========== MAIN CONTENT ========== */
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 16px 12px;
+    }
+
+    .doa-container {
+      position: relative;
+      border-radius: 16px;
+      padding: 24px 20px 28px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 4px 18px rgba(80, 40, 20, 0.09);
+    }
+
+    .doa-title {
+      text-align: center;
+      font-weight: 700;
+      margin: 0 0 18px;
+      font-size: clamp(0.95rem, 3.8vw, 1.25rem);
+      color: #9f1717;
+      line-height: 1.35;
+    }
+
+
+    /* ==================================================
+       TEXT + THERESIA LAYOUT
+       ================================================== */
+
+    /*
+      The text area is split into two parts:
+
+      1. .text-with-theresia
+         Text flows beside the picture.
+
+      2. .text-full-width
+         After the picture, text returns to full width.
+    */
+
+    .text-with-theresia {
+      overflow: hidden;
+    }
+
+    /*
+      Reserve the right side only for the portion of text
+      that is next to Theresia.
+    */
+    .theresia-space {
+      float: right;
+
+      /*
+        Width of image + gap.
+        This MUST correspond approximately to
+        the Theresia image width.
+      */
+      width: 98px;
+
+      /*
+        Height of the area occupied by the image.
+        The text after this height will naturally
+        continue at full width.
+      */
+      height: 145px;
+
+      margin-left: 14px;
+    }
+
+    .doa-text {
+      white-space: pre-line;
+      text-align: left;
+      font-size: clamp(1rem, 4vw, 1.12rem);
+      line-height: 1.85;
+    }
+
+    .doa-text p {
+      margin: 0 0 1.2em;
+    }
+
+    .amin {
+      display: block;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.15em;
+      color: #9f1717;
+      margin-top: 10px;
+    }
+
+
+    /* ========== FOOTER ========== */
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #777;
+      margin: 24px 0 32px;
+      padding: 0 16px;
+    }
+
+
+    /* ==================================================
+       MOBILE
+       ================================================== */
+
+    @media (max-width: 480px) {
+
+      body {
+        font-size: 16px;
+      }
+
+      header {
+        padding: 10px 12px 14px;
+      }
+
+      .salib {
+        height: 44px;
+      }
+
+      .theresia-sticky {
+        top: 100px;
+        right: 8px;
+        width: 64px;
+      }
+
+      main {
+        padding: 14px 12px 8px;
+      }
+
+      .doa-container {
+        padding: 20px 16px 24px;
+        border-radius: 14px;
+      }
+
+      /*
+        Smaller reserved area for the smaller
+        Theresia image on mobile.
+      */
+      .theresia-space {
+        width: 78px;
+        height: 118px;
+        margin-left: 10px;
+      }
+
+      .doa-text {
+        font-size: clamp(1rem, 4vw, 1.08rem);
+        line-height: 1.8;
+      }
+    }
+
+
+    /* ==================================================
+       VERY SMALL PHONES
+       ================================================== */
+
+    @media (max-width: 360px) {
+
+      .theresia-sticky {
+        width: 54px;
+        right: 6px;
+      }
+
+      .theresia-space {
+        width: 66px;
+        height: 100px;
+        margin-left: 8px;
+      }
+
+      .doa-container {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+    }
+
+
+    /* ==================================================
+       TABLET / DESKTOP
+       ================================================== */
+
+    @media (min-width: 600px) {
+
+      .theresia-sticky {
+        width: 90px;
+        top: 120px;
+        right: 20px;
+      }
+
+      .theresia-space {
+        width: 110px;
+        height: 165px;
+        margin-left: 20px;
+      }
+
+      .salib {
+        height: 58px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- ==================================================
+       THERESIA
+       Tetap fixed di kanan saat scrolling
+       ================================================== -->
+
+  <div class="theresia-sticky">
+    <img
+      src="Thersia_small.png"
+      alt="St. Theresia dari Kanak-kanak Yesus"
+    >
+  </div>
+
+
+  <!-- ==================================================
+       HEADER
+       ================================================== -->
+
+  <header>
+
+    <img
+      class="salib"
+      src="salib_small.png"
+      alt="Salib Natal"
+    >
+
+    <h1>DOA MOHON RAHMAT</h1>
+
+    <p>
+      BAGI TUGAS KEPANITIAAN NATAL 2026
+    </p>
+
+  </header>
+
+
+  <!-- ==================================================
+       MAIN CONTENT
+       ================================================== -->
+
+  <main>
+
+    <section
+      class="doa-container"
+      aria-label="Doa Mohon Rahmat"
+    >
+
+      <div class="doa-title">
+        Dalam Nama Bapa dan Putera dan Roh Kudus, Amin
+      </div>
+
+
+      <!--
+        Invisible layout spacer.
+
+        It occupies exactly the area where
+        Theresia appears, but the actual image
+        remains fixed on the screen.
+      -->
+      <div class="text-with-theresia">
+
+        <div class="theresia-space"></div>
+
+        <div class="doa-text">
+
+Allah Bapa yang Maha Kasih, kami bersyukur karena Engkau telah mempercayakan umat Wilayah St. Theresia dari Kanak-kanak Yesus Katedral Jakarta dalam mengemban tugas sebagai Panitia Natal Tahun 2026 ini.
+
+Kami mohon, curahkanlah Roh Kudus-Mu agar setiap langkah dan karya kami senantiasa berada dalam bimbingan-Mu.
+
+Berkatilah kami Umat Paroki maupun panitia NAtal ,agar dapat bekerja sama, melayani-Mu dengan penuh tanggung jawab, sukacita dan semangat persatuan. Anugerahkanlah kami hikmat, kebijaksanaan serta kerendahan hati sehingga setiap tantangan, hambatan maupun perbedaan pendapat dapat kami hadapi dengan hati yang tenang dan penuh kasih dalam semangat persaudaraan.
+Pagarilah kami dan jadilah tiang awan yang selalu melindungi kami dari segala yang jahat.
+
+Ya Bapa, kami serahkan seluruh doa, usaha dan pelayanan kami demi kemuliaan nama-Mu. Semoga semakin banyak umat mengalami sukacita Natal dan bertumbuh dalam iman serta pertobatan sejati.
+
+<span class="amin">Amin.</span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==================================================
+       FOOTER
+       ================================================== -->
+
+  <footer>
+    © Panitia Natal 2026 - Wilayah St. Theresia <br>
+    <a href="https://www.freecounterstat.com" title="website counter"><img src="https://counter6.optistats.ovh/private/freecounterstat.php?c=ejkhbmd91uehf5lz65d3yzfuu6n5qe3z" border="0" title="website counter" alt="website counter"></a>
+  </footer>
+
+
+</body>
+</html>
