@@ -1,0 +1,311 @@
+/* ===== Reset & Base ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #1a1a1a;
+  background-color: #f8fafc;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ===== Banner / Header ===== */
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  flex-wrap: nowrap;
+}
+
+.banner-left,
+.banner-right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-center {
+  flex: 1 1 auto;
+  text-align: center;
+  min-width: 0;
+  padding: 0 0.5rem;
+}
+
+.logo {
+  max-height: 80px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-katedral {
+  max-height: 85px;
+}
+
+.logo-theresia {
+  max-height: 80px;
+}
+
+/* Header Titles */
+.title-main {
+  font-size: clamp(0.95rem, 2.5vw, 1.65rem);
+  font-weight: 700;
+  color: #1a365d;
+  line-height: 1.25;
+  margin-bottom: 0.2rem;
+}
+
+.title-sub {
+  font-size: clamp(0.8rem, 1.8vw, 1.1rem);
+  font-weight: 500;
+  color: #2c5282;
+  letter-spacing: 0.02em;
+}
+
+.title-event {
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  font-weight: 700;
+  color: #c53030;
+  margin-top: 0.25rem;
+}
+
+/* ===== Main Content ===== */
+.content {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  width: 100%;
+}
+
+.cards-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-text {
+  text-align: left;
+}
+
+.content-text {
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.65;
+  color: #1a202c;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+}
+
+.content-link {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.content-link:hover {
+  color: #092570;
+}
+
+.content-closing {
+  margin-bottom: 0;
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  color: #0f172a;
+}
+
+.card-image {
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.content-img {
+  width: 100%;
+  max-width: 1069px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.clickable-img {
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.clickable-img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== Image Modal (80% Screen Pop-Up) ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-content {
+  max-width: 80vw;  /* Fits 80% of screen width */
+  max-height: 80vh; /* Fits 80% of screen height */
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  animation: zoomIn 0.25s ease forwards;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #f87171;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.85);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  padding: 1.25rem 1rem;
+  background: #ffffff;
+  font-size: 0.9rem;
+  color: #4a5568;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: auto;
+}
+
+.footer p {
+  margin: 0.2rem 0;
+}
+
+.footer a {
+  color: #2b6cb0;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Responsive Stacking ===== */
+@media (max-width: 850px) {
+  .content {
+    padding: 1.5rem 1rem;
+  }
+
+  .cards-wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .glass-card {
+    width: 100%;
+  }
+
+  .card-text {
+    text-align: center;
+  }
+
+  .modal-content {
+    max-width: 90vw;
+    max-height: 80vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .banner {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .logo {
+    max-height: 48px;
+  }
+
+  .logo-katedral {
+    max-height: 52px;
+  }
+
+  .logo-theresia {
+    max-height: 50px;
+  }
+
+  .glass-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo {
+    max-height: 40px;
+  }
+
+  .title-main {
+    font-size: 0.85rem;
+  }
+}
