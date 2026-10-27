@@ -417,7 +417,7 @@ a:hover {
 
 /* Jadwal Korona: hanya 1 jadwal → lebih kecil */
 .poster-card.schedule-korona {
-  max-width: 420px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
