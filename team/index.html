@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wilayah St. Theresia dari Kanak-Kanak Yesus | Panitia Natal 2026</title>
+  <link href="./favicon.png" rel="shortcut icon" />	
+  <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner-left">
+      <img src="logoK7.png" alt="Logo Katedral Jakarta" class="logo logo-katedral">
+    </div>
+    <div class="banner-center">
+      <h1 class="title-main">Wilayah St. Theresia dari Kanak-Kanak Yesus</h1>
+      <p class="title-sub">Katedral Jakarta</p>
+      <p class="title-event">Panitia Natal 2026</p>
+    </div>
+    <div class="banner-right">
+      <img src="st_theresia.png" alt="Logo St. Theresia" class="logo logo-theresia">
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="cards-wrapper">
+      <!-- Glass Box 1: Text Content -->
+      <div class="glass-card card-text">
+        <p class="content-text">
+          Berikut adalah sebagian tim yang dibentuk dalam kepanitiaan Natal 2026 di Katedral Jakarta, 
+          Mohon doa untuk kelancaran dan keamanan rangkaian kegiatan Natal 2026, dimulai dari Adven, 
+          Pengakuan dosa, Misa Malam Natal, Misa Natal dan Pontifikal sampai Epifani.
+        </p>
+        <p class="content-text">
+          Mohon pagar doa untuk Tim Panitia <a href="https://tkky.my.id/doa" class="content-link" target="_blank" rel="noopener noreferrer">https://tkky.my.id/doa</a>
+        </p>
+        <p class="content-text content-closing">
+          Semoga Tuhan memberkati kita semua.<br>
+          <strong>Amin.</strong>
+        </p>
+      </div>
+
+      <!-- Glass Box 2: Image bg1.png (Clickable) -->
+      <div class="glass-card card-image">
+        <img src="bg1.png" alt="Natal 2026 Illustration" class="content-img clickable-img" onclick="openModal(this.src)">
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 wil.Theresia dari Kanak Kanak Yesus</p>
+    <p><a href="https://tkky.my.id" target="_blank" rel="noopener noreferrer">https://tkky.my.id</a></p>
+  </footer>
+
+  <!-- Modal / Lightbox Popup -->
+  <div id="imageModal" class="modal" onclick="closeModal(event)">
+    <span class="modal-close" onclick="closeModal(event)">&times;</span>
+    <img class="modal-content" id="modalImg" alt="Enlarged View">
+  </div>
+
+  <script>
+    function openModal(imageSrc) {
+      const modal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("modalImg");
+      modalImg.src = imageSrc;
+      modal.classList.add("active");
+    }
+
+    function closeModal(event) {
+      // Close when clicking close button or clicking outside the image
+      if (event.target.id === "imageModal" || event.target.className === "modal-close") {
+        document.getElementById("imageModal").classList.remove("active");
+      }
+    }
+
+    // Close modal when hitting ESC key
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") {
+        document.getElementById("imageModal").classList.remove("active");
+      }
+    });
+  </script>
+
+</body>
+</html>
