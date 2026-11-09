@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator QR Code TdKKY</title>
+    <!-- Memuat Library QRCode.js dari CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #3498db;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-generate {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-generate:hover {
+            background-color: #2980b9;
+        }
+        .btn-reset {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-reset:hover {
+            background-color: #c0392b;
+        }
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        #qrcode img {
+            border: 8px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>QR Code TdKKY</h2>
+        
+        <div class="input-group">
+            <label for="urlInput">Masukkan Tautan / Link Valid:</label>
+            <input type="text" id="urlInput" placeholder="https://tkky.my.id" autocomplete="off">
+            <div id="errorMsg" class="error-message">Masukkan URL yang valid (contoh: https://tkky.my.id atau google.com)</div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-generate" onclick="generateQR()">Buat QR</button>
+            <button class="btn-reset" onclick="resetQR()">Reset</button>
+        </div>
+
+        <!-- Tempat Tampilnya QR Code -->
+        <div id="qrcode"></div>
+    </div>
+
+    <script>
+        let qrcodeInstance = null;
+
+        // Fungsi mengecek apakah teks merupakan tautan valid
+        function isValidURL(string) {
+            let urlToTest = string.trim();
+            
+            // Tambahkan http:// secara otomatis jika user mengetik domain tanpa protokol (misal: "tkky.my.id")
+            if (!/^https?:\/\//i.test(urlToTest)) {
+                urlToTest = 'http://' + urlToTest;
+            }
+
+            try {
+                const parsedUrl = new URL(urlToTest);
+                // Memastikan URL memiliki hostname yang valid dengan domain (misal ada titiknya seperti domain.com)
+                return parsedUrl.hostname.includes('.');
+            } catch (err) {
+                return false;
+            }
+        }
+
+        function generateQR() {
+            let inputField = document.getElementById('urlInput');
+            let rawUrl = inputField.value.trim();
+            const qrContainer = document.getElementById('qrcode');
+            const errorMsg = document.getElementById('errorMsg');
+
+            // Sembunyikan pesan eror awal
+            errorMsg.style.display = 'none';
+
+            // Validasi: Cek apakah input kosong atau bukan URL valid
+            if (rawUrl === "" || !isValidURL(rawUrl)) {
+                errorMsg.style.display = 'block';
+                qrContainer.innerHTML = "";
+                return;
+            }
+
+            // Otomatis tambahkan https:// jika user mengetik tanpa protokol
+            if (!/^https?:\/\//i.test(rawUrl)) {
+                rawUrl = 'https://' + rawUrl;
+                inputField.value = rawUrl; // Perbarui nilai input di layar
+            }
+
+            // Bersihkan QR code lama jika ada
+            qrContainer.innerHTML = "";
+
+            // Buat QR Code baru
+            qrcodeInstance = new QRCode(qrContainer, {
+                text: rawUrl,
+                width: 400,
+                height: 400,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function resetQR() {
+            document.getElementById('urlInput').value = "";
+            document.getElementById('qrcode').innerHTML = "";
+            document.getElementById('errorMsg').style.display = 'none';
+            qrcodeInstance = null;
+        }
+    </script>
+
+</body>
+</html>
