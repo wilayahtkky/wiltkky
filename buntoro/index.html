@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direktori - Tkky.my.id</title>
+    <style>
+        :root {
+            --bg-color: #090a0f;
+            --card-bg: #13161f;
+            --card-hover: #191d29;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-border: rgba(212, 175, 55, 0.35);
+            --gold-border-bright: rgba(212, 175, 55, 0.8);
+            --gold-glow: rgba(212, 175, 55, 0.12);
+            --admin-bg: #0d0f15;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px 16px;
+        }
+
+        /* Container proporsional layar 6,3 inci */
+        .container {
+            width: 100%;
+            max-width: 412px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 22px 16px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--gold-border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+            position: relative;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold-primary);
+            background: var(--gold-glow);
+            border: 1px solid var(--gold-border);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.01em;
+            margin-bottom: 8px;
+        }
+
+        .email-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.84rem;
+            color: var(--gold-light);
+            background: var(--bg-color);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            padding: 6px 14px;
+            border-radius: 8px;
+            margin-top: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .email-box:active {
+            background: var(--gold-glow);
+            border-color: var(--gold-primary);
+        }
+
+        .section-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gold-primary);
+            margin: 0 0 10px 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold-border), transparent);
+        }
+
+        .link-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            padding: 15px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--gold-border);
+            border-left: 3px solid var(--gold-primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+            transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .link-card:active {
+            transform: scale(0.985);
+            background-color: var(--card-hover);
+            border-color: var(--gold-border-bright);
+        }
+
+        .link-info {
+            display: flex;
+            flex-direction: column;
+            padding-right: 10px;
+        }
+
+        .link-title {
+            font-size: 0.94rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .link-sub {
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+            margin-top: 3px;
+            word-break: break-all;
+        }
+
+        .arrow-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--gold-primary);
+            flex-shrink: 0;
+        }
+
+        /* Gaya Accordion untuk bagian Admin */
+        .accordion {
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--gold-border);
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .accordion-header {
+            width: 100%;
+            background: var(--card-bg);
+            border: none;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            transition: background 0.2s;
+        }
+
+        .accordion-header:active {
+            background: var(--card-hover);
+        }
+
+        .accordion-header .left-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .accordion-header svg {
+            color: var(--gold-primary);
+        }
+
+        .chevron {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.25s ease;
+        }
+
+        .accordion.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: var(--admin-bg);
+            border-top: 1px solid transparent;
+        }
+
+        .accordion.open .accordion-content {
+            border-top-color: var(--gold-border);
+        }
+
+        .accordion-inner {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .admin-card {
+            background: var(--card-bg);
+            padding: 13px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.28);
+            border-left: 3px solid var(--gold-primary);
+        }
+
+        .sync-card {
+            border-style: dashed;
+            border-left-style: solid;
+            border-color: rgba(212, 175, 55, 0.45);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #13161f;
+            color: var(--gold-light);
+            border: 1px solid var(--gold-primary);
+            font-size: 0.82rem;
+            padding: 8px 18px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 100;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.75rem;
+            color: #64748b;
+            letter-spacing: 0.03em;
+        }
+
+        footer span {
+            color: var(--gold-primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="badge">Catatan Bun</span>
+        <h1>Direktori Tkky.my.id</h1>
+        <div class="email-box" onclick="copyEmail()" title="Ketuk untuk menyalin email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <span id="emailText">panitia@tkky.my.id</span>
+        </div>
+    </header>
+
+    <div class="section-title">Link Untuk Natal</div>
+    <div class="link-group">
+        <a href="http://tkky.my.id" class="link-card" target="_blank" rel="noopener">
+            <div class="link-info">
+                <span class="link-title">Pendaftaran</span>
+                <span class="link-sub">tkky.my.id</span>
+            </div>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </a>
+
+        <a href="http://tkky.my.id/doa" class="link-card" target="_blank" rel="noopener">
+            <div class="link-info">
+                <span class="link-title">Doa Mendoakan Kepanitiaan Natal Wil</span>
+                <span class="link-sub">tkky.my.id/doa</span>
+            </div>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </a>
+
+        <a href="http://tkky.my.id/team" class="link-card" target="_blank" rel="noopener">
+            <div class="link-info">
+                <span class="link-title">Panitia Natal</span>
+                <span class="link-sub">tkky.my.id/team</span>
+            </div>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </a>
+
+        <a href="http://tkky.my.id/epifani" class="link-card" target="_blank" rel="noopener">
+            <div class="link-info">
+                <span class="link-title">Doa Kapur Epifani</span>
+                <span class="link-sub">tkky.my.id/epifani</span>
+            </div>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Bagian Admin (Accordion) -->
+    <div class="accordion" id="adminAccordion">
+        <button class="accordion-header" type="button" onclick="toggleAccordion()" aria-expanded="false">
+            <span class="left-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Menu Admin
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+            </svg>
+        </button>
+
+        <div class="accordion-content" id="accordionContent">
+            <div class="accordion-inner">
+                <a href="http://tkky.my.id/report" class="link-card admin-card" target="_blank" rel="noopener">
+                    <div class="link-info">
+                        <span class="link-title">Report</span>
+                        <span class="link-sub">tkky.my.id/report</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </a>
+
+                <a href="http://tkky.my.id/tobat" class="link-card admin-card" target="_blank" rel="noopener">
+                    <div class="link-info">
+                        <span class="link-title">List Romo Sakramen Tobat</span>
+                        <span class="link-sub">tkky.my.id/tobat</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </a>
+
+                <a href="http://tkky.my.id/petugas" class="link-card admin-card" target="_blank" rel="noopener">
+                    <div class="link-info">
+                        <span class="link-title">Petugas Adven (Korona & Lilin)</span>
+                        <span class="link-sub">tkky.my.id/petugas</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </a>
+
+                <a href="http://tkky.my.id/petugas/adminpetugas.html" class="link-card admin-card sync-card" target="_blank" rel="noopener">
+                    <div class="link-info">
+                        <span class="link-title">Admin Sync Petugas Adven</span>
+                        <span class="link-sub">tkky.my.id/petugas/adminpetugas.html</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </a>
+
+                <a href="http://s.id/jadwaltkky" class="link-card admin-card" target="_blank" rel="noopener">
+                    <div class="link-info">
+                        <span class="link-title">PIC TKKY</span>
+                        <span class="link-sub">s.id/jadwaltkky</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <span>tkky.my.id</span> &bull; Catatan Web
+    </footer>
+</div>
+
+<div class="toast" id="toast">Email berhasil disalin</div>
+
+<script>
+    function toggleAccordion() {
+        const accordion = document.getElementById('adminAccordion');
+        const content = document.getElementById('accordionContent');
+        const button = accordion.querySelector('.accordion-header');
+        const isOpen = accordion.classList.toggle('open');
+
+        button.setAttribute('aria-expanded', isOpen);
+        if (isOpen) {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+            content.style.maxHeight = '0px';
+        }
+    }
+
+    function copyEmail() {
+        const email = document.getElementById('emailText').innerText;
+        navigator.clipboard.writeText(email).then(() => {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
