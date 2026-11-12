@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Sync Data Petugas Natal 2026</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-action-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .btn-get-data {
+      background-color: #2563eb;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-get-data:hover {
+      background-color: #1d4ed8;
+    }
+    .btn-get-data:active {
+      transform: scale(0.98);
+    }
+    .btn-get-data:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+    .status-box {
+      margin-top: 16px;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .status-success {
+      color: #16a34a;
+    }
+    .status-error {
+      color: #dc2626;
+    }
+    .status-loading {
+      color: #d97706;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="header-sticky">
+      
+      <div class="header-top">
+        <h1 class="header-title">Admin Sync Petugas Natal 2026</h1>
+        <div class="event-filters">
+          <button onclick="setEvent('Adven I')" id="btn-Adven I" class="btn-event active">Adven I</button>
+          <button onclick="setEvent('Adven II')" id="btn-Adven II" class="btn-event">Adven II</button>
+          <button onclick="setEvent('Adven III')" id="btn-Adven III" class="btn-event">Adven III</button>
+          <button onclick="setEvent('Adven IV')" id="btn-Adven IV" class="btn-event">Adven IV</button>
+        </div>
+      </div>
+
+      <div class="tabs-container">
+        <button onclick="setTab('perarakan')" id="tab-perarakan" class="tab-btn active">Perarakan Korona</button>
+        <button onclick="setTab('penyalaan')" id="tab-penyalaan" class="tab-btn">Penyalaan Lilin</button>
+      </div>
+
+      <div class="search-container">
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" oninput="handleSearch()" class="search-input" placeholder="Cari nama, lingkungan, atau wilayah...">
+          <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="main-content">
+      <!-- Card Panel Tombol Sync/Get DATA -->
+	  <div id="loading" class="loading-text">Memuat data jadwal...</div>
+      <div id="cards-container" class="cards-container"></div>
+
+      <div class="admin-action-card">
+        <h3>Sinkronisasi Data Jadwal</h3>
+        <p style="color: #6b7280; margin-bottom: 12px;">Ambil dan cocokkan data dari sheet backup ke sheet target (Perarakan Korona & Penyalaan Lilin).</p>
+        <button id="btnGetData" onclick="handleGetData()" class="btn-get-data">
+          🔄 Get DATA / Sync
+        </button>
+        <div id="statusMessage" class="status-box"></div>
+      </div>
+
+
+    </div>
+
+    <footer class="footer-bar">
+      Panitia Natal Katedral Jakarta <p> Wilayah Theresia dari Kanak-Kanak Yesus &copy; 2026 </p>
+    </footer>
+  </div>
+
+  <script>
+    // URL Web App Google Apps Script
+    const API_URL = "https://script.google.com/macros/s/AKfycbxk_n0SJ1Sxp3Db8Jja2d8SEos_gJcFaFT4N7WU3OauxZATeu-Pxj14nUumVHLJWI0Z/exec"; 
+    
+    let db = { perarakan: [], penyalaan: [] };
+    let activeEvent = 'Adven I';
+    let activeTab = 'perarakan';
+    let searchQuery = '';
+
+    window.onload = () => {
+      loadData();
+    };
+
+    function loadData() {
+      document.getElementById('loading').style.display = 'block';
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          db = data;
+          document.getElementById('loading').style.display = 'none';
+          renderCards();
+        })
+        .catch(err => {
+          document.getElementById('loading').innerText = "Gagal memuat data. Silakan coba lagi.";
+        });
+    }
+
+    // Fungsi Trigger untuk Tombol "Get DATA"
+		function handleGetData() {
+		  const btn = document.getElementById('btnGetData');
+		  const status = document.getElementById('statusMessage');
+
+		  btn.disabled = true;
+		  status.className = "status-box status-loading";
+		  status.innerText = "Sedang menyinkronkan data korona & penyalaan lilin...";
+
+		  // 1. Eksekusi Sync
+		  fetch(API_URL + "?action=sync")
+			.then(res => res.json())
+			.then(res => {
+			  if (res.status === "success") {
+				status.className = "status-box status-success";
+				status.innerText = "✅ " + res.message;
+				
+				// 2. Ambil & tampilkan data terbaru ke kartu dashboard
+				loadData(); 
+			  } else {
+				status.className = "status-box status-error";
+				status.innerText = "❌ Gagal: " + (res.message || "Terjadi kesalahan saat sync.");
+			  }
+			})
+			.catch(err => {
+			  status.className = "status-box status-error";
+			  status.innerText = "❌ Terjadi kesalahan koneksi/server.";
+			})
+			.finally(() => {
+			  btn.disabled = false;
+			});
+		}
+
+    function setEvent(eventName) {
+      activeEvent = eventName;
+      document.querySelectorAll('.btn-event').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn-' + eventName).classList.add('active');
+      renderCards();
+    }
+
+    function setTab(tabName) {
+      activeTab = tabName;
+      document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      renderCards();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      renderCards();
+    }
+
+    function toggleAccordion(index) {
+      const content = document.getElementById('content-' + index);
+      const icon = document.getElementById('icon-' + index);
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function renderCards() {
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+
+      let records = (db[activeTab] || []).filter(item => (item.Event || "").toString().trim() === activeEvent);
+
+      if (searchQuery) {
+        records = records.filter(item => {
+          const rowData = Object.values(item).join(' ').toLowerCase();
+          return rowData.includes(searchQuery);
+        });
+      }
+
+      if (records.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-500 mt-10">Tidak ada data ditemukan.</p>`;
+        return;
+      }
+
+      records.sort((a, b) => {
+        let dtA = new Date((a.Tanggal || "") + " " + (a.jam || "00:00"));
+        let dtB = new Date((b.Tanggal || "") + " " + (b.jam || "00:00"));
+        if (!isNaN(dtA) && !isNaN(dtB)) {
+          return dtA - dtB;
+        } else {
+          let strA = (a.Tanggal || "") + " " + (a.jam || "");
+          let strB = (b.Tanggal || "") + " " + (b.jam || "");
+          return strA.localeCompare(strB);
+        }
+      });
+
+      const groupedData = {};
+      records.forEach(item => {
+        const dateKey = item.Tanggal || 'Tanggal Tidak Ditetapkan';
+        const timeKey = item.jam || 'Waktu Tidak Ditetapkan';
+        
+        if (!groupedData[dateKey]) groupedData[dateKey] = {};
+        if (!groupedData[dateKey][timeKey]) groupedData[dateKey][timeKey] = [];
+        
+        groupedData[dateKey][timeKey].push(item);
+      });
+
+      let html = '';
+      let accordionIndex = 0;
+
+      let sectionTitle = activeTab === 'perarakan' ? 'Petugas Perarakan Korona Adven' : 'Petugas Penyalaan Lilin Adven';
+      html += `<h2 class="tab-section-title">${sectionTitle}</h2>`;
+
+      let unitLabel = activeTab === 'perarakan' ? 'Petugas' : 'Pasangan suami istri';
+
+      for (const [dateKey, timeGroups] of Object.entries(groupedData)) {
+        html += `
+          <div class="date-divider">
+            <div class="divider-line"></div>
+            <span class="date-badge">🗓️ ${dateKey}</span>
+            <div class="divider-line"></div>
+          </div>
+        `;
+
+        for (const [timeKey, items] of Object.entries(timeGroups)) {
+          html += `
+            <div class="accordion-item">
+              <button onclick="toggleAccordion(${accordionIndex})" class="accordion-header">
+                <div class="accordion-title-group">
+                  <span class="time-badge">⏰ ${timeKey}</span>
+                  <span class="petugas-count">${items.length} ${unitLabel}</span>
+                </div>
+                <svg id="icon-${accordionIndex}" class="chevron-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div id="content-${accordionIndex}" class="accordion-content hidden">
+          `;
+
+          items.forEach(item => {
+            let title, details, person;
+            
+            if (activeTab === 'perarakan') {
+              title = `${item.wilayah || ''} ${item.lingkungan ? '- ' + item.lingkungan : ''}`;
+              details = `Tugas: Perarakan Korona`;
+              person = `Petugas: <span class="font-bold">${item['Nama petugas'] || '-'}</span>`;
+            } else {
+              title = item['Asal Petugas'] || item.Wilayah || item.kategorial || '-';
+              details = `${item.Lingkungan ? `Lingkungan: ${item.Lingkungan}` : 'Tugas: Penyalaan Lilin'}`;
+              person = `Suami & Istri: <span class="font-bold">${item['Nama Suami'] || '-'} & ${item['Nama Istri'] || '-'}</span>`;
+            }
+
+            html += `
+              <div class="task-card">
+                <h3 class="task-title">${title}</h3>
+                <p class="task-details">${details}</p>
+                <div class="task-person">${person}</div>
+              </div>
+            `;
+          });
+
+          html += `</div></div>`;
+          accordionIndex++;
+        }
+      }
+
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
