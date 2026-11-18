@@ -1,0 +1,323 @@
+:root {
+  --bg-page: #e9e6df;
+  --paper-cream: #f4efe6;
+  --green-title: #1e5b12;
+  --purple-header: #8e35b8;
+  --purple-footer: #e4c5f2;
+  --text-dark: #23182b;
+  --border-light: #e2dce6;
+  --border-wilayah: #2a0d38;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-page);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-dark);
+  line-height: 1.4;
+  padding-bottom: 48px;
+}
+
+/* Top Navigation / Filter Bar */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #23182b;
+  color: #fff;
+  padding: 12px 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.toolbar-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.toolbar-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.toolbar-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.toolbar select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #5a436b;
+  background: #332240;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+
+.btn-print {
+  background: var(--purple-header);
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-print:hover {
+  opacity: 0.9;
+}
+
+/* Scrolling Container for Multiple Tables */
+.report-container {
+  max-width: 1040px;
+  margin: 28px auto 0;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.status-box {
+  background: #fff;
+  padding: 32px;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.status-box.error {
+  color: #b91c1c;
+}
+
+/* Individual Report Card (Matches contoh report.jpg) */
+.report-sheet {
+  position: relative;
+  background-color: var(--paper-cream);
+  background-image:
+    radial-gradient(rgba(160, 145, 120, 0.14) 1px, transparent 0),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(232, 223, 207, 0.45) 100%);
+  background-size: 18px 18px, 100% 100%;
+  padding: 28px 44px 36px;
+  border-radius: 4px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+/* Header with Left & Right Logos */
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.logo-left {
+  width: 78px;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.logo-right {
+  width: 84px;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.header-center {
+  text-align: center;
+  flex: 1;
+}
+
+.report-title {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.7vw, 2.05rem);
+  color: var(--green-title);
+  letter-spacing: 0.6px;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.report-date {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(1.05rem, 2vw, 1.5rem);
+  color: var(--green-title);
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.report-time {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(1.05rem, 2vw, 1.45rem);
+  color: var(--green-title);
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* Table Styling */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.korona-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  table-layout: fixed;
+}
+
+.korona-table thead th {
+  background-color: var(--purple-header);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 12px 14px;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.korona-table thead th:last-child {
+  border-right: none;
+}
+
+.col-wilayah {
+  width: 31%;
+}
+
+.col-lingkungan {
+  width: 34%;
+}
+
+.col-petugas {
+  width: 35%;
+}
+
+.korona-table tbody td {
+  padding: 9px 14px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  font-size: 0.96rem;
+}
+
+.korona-table tbody td:last-child {
+  border-right: none;
+}
+
+/* Merged Wilayah Column */
+.korona-table tbody td.col-wilayah {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.08rem;
+  color: #1f0d2b;
+  background-color: #ffffff;
+}
+
+/* Lingkungan & Petugas Text */
+.korona-table tbody td.col-lingkungan {
+  font-weight: 600;
+  color: #2b1d36;
+}
+
+.korona-table tbody td.col-petugas {
+  font-weight: 600;
+  color: #1a237e;
+}
+
+/* Thick horizontal divider separating Wilayah blocks */
+.korona-table tbody tr.wilayah-divider td,
+.korona-table tbody td.wilayah-divider {
+  border-bottom: 2.5px solid var(--border-wilayah);
+}
+
+/* Footer Summary Row */
+.korona-table tfoot td {
+  padding: 10px 14px;
+}
+
+.korona-table tfoot td.footer-empty {
+  background-color: #ffffff;
+  border-top: 1px solid var(--border-light);
+}
+
+.korona-table tfoot td.footer-total {
+  background-color: var(--purple-footer);
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: #1f0d2b;
+  text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 700px) {
+  .report-sheet {
+    padding: 20px 14px 24px;
+  }
+
+  .logo-left {
+    width: 52px;
+  }
+
+  .logo-right {
+    width: 56px;
+  }
+
+  .korona-table thead th,
+  .korona-table tbody td {
+    padding: 8px 6px;
+    font-size: 0.85rem;
+  }
+
+  .korona-table tbody td.col-wilayah {
+    font-size: 0.9rem;
+  }
+}
+
+/* Print Layout */
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .report-container {
+    margin: 0;
+    padding: 0;
+    gap: 24px;
+  }
+
+  .report-sheet {
+    box-shadow: none;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Petugas Pembawa Korona - Katedral Jakarta</title>
+  <!-- Google Fonts matching the classic serif & sans-serif look in contoh report -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style1.css" />
+</head>
+<body>
+
+  <!-- Optional filter bar (hidden when printing) -->
+  <div class="toolbar no-print">
+    <div class="toolbar-inner">
+      <span class="toolbar-title">Jadwal Petugas Pembawa Korona</span>
+      <div class="toolbar-controls">
+        <select id="filterSchedule">
+          <option value="ALL">Semua Jadwal Misa</option>
+        </select>
+        <button onclick="window.print()" class="btn-print">Cetak / PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Scrolling Report Container -->
+  <main id="reportContainer" class="report-container">
+    <div class="status-box">Memuat jadwal petugas pembawa korona...</div>
+  </main>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxegF2l2aTIlJo9Jnsn3yIqNThinFVvcYycMV5-w-CSPxJl5EH_JJkZghcWQ7UbVafLQg/exec";
+
+    let allGroupedSchedules = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchReportData();
+      document.getElementById("filterSchedule").addEventListener("change", (e) => {
+        renderReports(e.target.value);
+      });
+    });
+
+    async function fetchReportData() {
+      const container = document.getElementById("reportContainer");
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=publicReport`);
+        const json = await response.json();
+
+        if (json.status !== "success" || !Array.isArray(json.data)) {
+          throw new Error(json.message || "Format data tidak valid.");
+        }
+
+        if (json.data.length === 0) {
+          container.innerHTML = `<div class="status-box">Belum ada data jadwal tersedia.</div>`;
+          return;
+        }
+
+        allGroupedSchedules = groupDataBySchedule(json.data);
+        populateFilterDropdown(allGroupedSchedules);
+        renderReports("ALL");
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="status-box error">Gagal memuat data: ${err.message}</div>`;
+      }
+    }
+
+    // Flexible column resolver in case exact header capitalization varies slightly
+    function getColValue(row, candidates, fallbackIndex) {
+      const keys = Object.keys(row);
+      for (const cand of candidates) {
+        const foundKey = keys.find(k => k.toLowerCase() === cand.toLowerCase());
+        if (foundKey && row[foundKey] !== undefined) return row[foundKey];
+      }
+      if (fallbackIndex !== undefined && keys[fallbackIndex]) {
+        return row[keys[fallbackIndex]];
+      }
+      return "";
+    }
+
+    function groupDataBySchedule(rows) {
+      const groupsMap = new Map();
+      let lastDate = "";
+      let lastTime = "";
+      let lastWilayah = "";
+
+      rows.forEach((row) => {
+        // Carry forward merged/blank cells if sheet uses visual grouping
+        const rawDate = getColValue(row, ["Tanggal", "Hari/Tanggal", "Hari, Tanggal", "Date"], 1);
+        const rawTime = getColValue(row, ["Jam", "Waktu", "Pukul", "Misa", "Time"], 2);
+        const rawWilayah = getColValue(row, ["Wilayah"], 4);
+        const lingkungan = getColValue(row, ["Lingkungan"], 5);
+        const petugas = getColValue(row, ["Nama Petugas", "Petugas", "Nama"], 6);
+
+        if (rawDate) lastDate = rawDate;
+        if (rawTime) lastTime = rawTime;
+        if (rawWilayah) lastWilayah = rawWilayah;
+
+        if (!lingkungan && !petugas) return;
+
+        const scheduleKey = `${lastDate}|||${lastTime}`;
+        if (!groupsMap.has(scheduleKey)) {
+          groupsMap.set(scheduleKey, {
+            key: scheduleKey,
+            date: lastDate,
+            time: lastTime,
+            items: []
+          });
+        }
+
+        groupsMap.get(scheduleKey).items.push({
+          wilayah: lastWilayah || "-",
+          lingkungan: lingkungan || "-",
+          petugas: petugas || ""
+        });
+      });
+
+      return Array.from(groupsMap.values());
+    }
+
+    function populateFilterDropdown(groups) {
+      const select = document.getElementById("filterSchedule");
+      groups.forEach((g) => {
+        const opt = document.createElement("option");
+        opt.value = g.key;
+        opt.textContent = `${g.date} — ${g.time}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderReports(filterKey) {
+      const container = document.getElementById("reportContainer");
+      const filtered = filterKey === "ALL"
+        ? allGroupedSchedules
+        : allGroupedSchedules.filter(g => g.key === filterKey);
+
+      container.innerHTML = filtered.map(group => buildReportCardHTML(group)).join("");
+    }
+
+    function buildReportCardHTML(group) {
+      // Group consecutive rows by Wilayah for vertical rowspan merging
+      const wilayahBlocks = [];
+      group.items.forEach((item) => {
+        const lastBlock = wilayahBlocks[wilayahBlocks.length - 1];
+        if (lastBlock && lastBlock.wilayah === item.wilayah) {
+          lastBlock.rows.push(item);
+        } else {
+          wilayahBlocks.push({
+            wilayah: item.wilayah,
+            rows: [item]
+          });
+        }
+      });
+
+      let tbodyHTML = "";
+      wilayahBlocks.forEach((block, blockIdx) => {
+        const isLastBlock = blockIdx === wilayahBlocks.length - 1;
+        const rowCount = block.rows.length;
+
+        block.rows.forEach((r, rIdx) => {
+          const isLastRowInBlock = rIdx === rowCount - 1;
+          const dividerClass = (!isLastBlock && isLastRowInBlock) ? "wilayah-divider" : "";
+
+          tbodyHTML += `<tr class="${dividerClass}">`;
+          if (rIdx === 0) {
+            tbodyHTML += `<td class="col-wilayah ${!isLastBlock ? 'wilayah-divider' : ''}" rowspan="${rowCount}">${escapeHTML(block.wilayah)}</td>`;
+          }
+          tbodyHTML += `
+            <td class="col-lingkungan">${escapeHTML(r.lingkungan)}</td>
+            <td class="col-petugas">${escapeHTML(r.petugas)}</td>
+          </tr>`;
+        });
+      });
+
+      const totalOrang = group.items.length;
+
+      return `
+        <section class="report-sheet">
+          <div class="sheet-texture"></div>
+          <header class="report-header">
+            <img src="images/logoK7.png" alt="Katedral Jakarta" class="logo-left" />
+            <div class="header-center">
+              <h1 class="report-title">PETUGAS PEMBAWA KORONA</h1>
+              <p class="report-date">${escapeHTML(group.date)}</p>
+              <p class="report-time">${escapeHTML(group.time)}</p>
+            </div>
+            <img src="images/st_theresia.png" alt="St. Theresia DKKY" class="logo-right" />
+          </header>
+
+          <div class="table-wrapper">
+            <table class="korona-table">
+              <thead>
+                <tr>
+                  <th class="col-wilayah">Wilayah</th>
+                  <th class="col-lingkungan">Lingkungan</th>
+                  <th class="col-petugas">Petugas</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tbodyHTML}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td class="footer-empty"></td>
+                  <td class="footer-total" colspan="2">Total ${totalOrang} Orang</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+      `;
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>

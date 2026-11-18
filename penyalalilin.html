@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Pasutri Penyala Lilin Adven - Katedral Jakarta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style1.css" />
+  <style>
+    .lilin-subtitle {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.65rem);
+      color: var(--green-title);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .lilin-table .col-hari {
+      width: 21%;
+    }
+
+    .lilin-table .col-jam {
+      width: 17%;
+    }
+
+    .lilin-table .col-asal {
+      width: 28%;
+    }
+
+    .lilin-table .col-nama {
+      width: 34%;
+    }
+
+    .lilin-table tbody td.col-hari {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: #2b1d36;
+      background-color: #ffffff;
+      line-height: 1.45;
+    }
+
+    .lilin-table tbody td.col-jam,
+    .lilin-table tbody td.col-asal {
+      font-weight: 600;
+      color: #2b1d36;
+    }
+
+    .lilin-table tbody td.col-nama {
+      font-weight: 600;
+      color: #1a237e;
+      line-height: 1.45;
+    }
+
+    .pasutri-pair {
+      display: inline-block;
+    }
+
+    .pasutri-amp {
+      color: #6b587a;
+      font-weight: 400;
+      margin: 0 4px;
+    }
+
+    @media (max-width: 700px) {
+      .lilin-table tbody td.col-hari {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Filter & Print Toolbar -->
+  <div class="toolbar no-print">
+    <div class="toolbar-inner">
+      <span class="toolbar-title">Pasutri Penyala Lilin Adven</span>
+      <div class="toolbar-controls">
+        <select id="filterAdven">
+          <option value="ALL">Semua Minggu Adven</option>
+        </select>
+        <button onclick="window.print()" class="btn-print">Cetak / PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Scrolling Report Container -->
+  <main id="reportContainer" class="report-container">
+    <div class="status-box">Memuat jadwal pasutri penyala lilin adven...</div>
+  </main>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxegF2l2aTIlJo9Jnsn3yIqNThinFVvcYycMV5-w-CSPxJl5EH_JJkZghcWQ7UbVafLQg/exec";
+
+    let allGroupedPages = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchLilinData();
+      document.getElementById("filterAdven").addEventListener("change", (e) => {
+        renderReports(e.target.value);
+      });
+    });
+
+    async function fetchLilinData() {
+      const container = document.getElementById("reportContainer");
+      try {
+        const response = await fetch(`${SCRIPT_URL}?action=publicPenyalaan`);
+        const json = await response.json();
+
+        if (json.status !== "success" || !Array.isArray(json.data)) {
+          throw new Error(json.message || "Format data tidak valid.");
+        }
+
+        if (json.data.length === 0) {
+          container.innerHTML = `<div class="status-box">Belum ada data jadwal penyala lilin tersedia.</div>`;
+          return;
+        }
+
+        allGroupedPages = groupDataByAdven(json.data);
+        populateFilterDropdown(allGroupedPages);
+        renderReports("ALL");
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="status-box error">Gagal memuat data: ${err.message}</div>`;
+      }
+    }
+
+    function getColValue(row, candidates, fallbackIndex) {
+      const keys = Object.keys(row);
+      // Prefer exact index if fallbackIndex exists and matches Column D directly
+      if (fallbackIndex !== undefined && keys[fallbackIndex] && candidates.length === 0) {
+        return row[keys[fallbackIndex]].toString().trim();
+      }
+      for (const cand of candidates) {
+        const foundKey = keys.find(k => k.toLowerCase() === cand.toLowerCase());
+        if (foundKey && row[foundKey] !== undefined) return row[foundKey].toString().trim();
+      }
+      if (fallbackIndex !== undefined && keys[fallbackIndex]) {
+        return row[keys[fallbackIndex]].toString().trim();
+      }
+      return "";
+    }
+
+    // Determines "Sabtu," for 16:00 / 16.00 / 18:00 / 18.00, and "Minggu," for all other Mass times
+    function getDayPrefixFromTime(jamStr) {
+      const normalized = jamStr.replace(/\./g, ":");
+      if (/\b(16:00|18:00)\b/.test(normalized)) {
+        return "Sabtu,";
+      }
+      return "Minggu,";
+    }
+
+    // Strips any existing "Sabtu," or "Minggu," so we get the clean date string
+    function stripExistingDayPrefix(dateStr) {
+      return dateStr.replace(/^(sabtu|minggu)\s*,?\s*/i, "").trim();
+    }
+
+    function groupDataByAdven(rows) {
+      const pagesMap = new Map();
+      let lastAdven = "";
+      let lastTanggal = "";
+
+      rows.forEach((row) => {
+        const keys = Object.keys(row);
+        // Column D is zero-based index 3 (A=0, B=1, C=2, D=3)
+        const rawAdven = keys[3] ? row[keys[3]].toString().trim() : getColValue(row, ["Adven", "Minggu Adven", "Minggu", "Keterangan"], 3);
+        const rawTanggal = getColValue(row, ["Tanggal", "Hari", "Hari/Tanggal", "Hari, Tanggal"], 1);
+        const jam = getColValue(row, ["Jam Misa", "Jam", "Waktu", "Pukul"], 2);
+        const petugasAsal = getColValue(row, ["Asal Petugas", "Petugas", "Wilayah/Kategorial"], 7);
+        const namaSuami = getColValue(row, ["Nama Suami", "Suami"], 8);
+        const namaIstri = getColValue(row, ["Nama Istri", "Istri"], 9);
+
+        if (rawAdven) lastAdven = rawAdven;
+        if (rawTanggal) lastTanggal = rawTanggal;
+
+        if (!jam && !petugasAsal) return;
+
+        const cleanDate = stripExistingDayPrefix(lastTanggal || "-");
+        const dayPrefix = getDayPrefixFromTime(jam);
+        const fullHariLabel = `${dayPrefix} ${cleanDate}`;
+
+        // Group by Column D (Adven I, Adven II, Adven III, Adven IV) onto one page/card
+        const advenTitle = lastAdven || "Adven";
+        if (!pagesMap.has(advenTitle)) {
+          pagesMap.set(advenTitle, {
+            key: advenTitle,
+            title: advenTitle,
+            items: []
+          });
+        }
+
+        pagesMap.get(advenTitle).items.push({
+          hariLabel: fullHariLabel,
+          dayPrefix,
+          cleanDate,
+          jam: jam || "-",
+          petugasAsal: petugasAsal || "-",
+          namaSuami,
+          namaIstri
+        });
+      });
+
+      return Array.from(pagesMap.values());
+    }
+
+    function populateFilterDropdown(pages) {
+      const select = document.getElementById("filterAdven");
+      pages.forEach((p) => {
+        const opt = document.createElement("option");
+        opt.value = p.key;
+        opt.textContent = p.title;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderReports(filterKey) {
+      const container = document.getElementById("reportContainer");
+      const filtered = filterKey === "ALL"
+        ? allGroupedPages
+        : allGroupedPages.filter(p => p.key === filterKey);
+
+      container.innerHTML = filtered.map(page => buildLilinCardHTML(page)).join("");
+    }
+
+    function formatPasutriNames(suami, istri) {
+      if (suami && istri) {
+        return `<span class="pasutri-pair">${escapeHTML(suami)} <span class="pasutri-amp">&amp;</span> ${escapeHTML(istri)}</span>`;
+      }
+      if (suami) return escapeHTML(suami);
+      if (istri) return escapeHTML(istri);
+      return "";
+    }
+
+    function buildLilinCardHTML(page) {
+      // Merge consecutive rows that share the same dayPrefix + date ("Sabtu, <date>" vs "Minggu, <date>")
+      const hariBlocks = [];
+      page.items.forEach((item) => {
+        const lastBlock = hariBlocks[hariBlocks.length - 1];
+        if (lastBlock && lastBlock.hariLabel === item.hariLabel) {
+          lastBlock.rows.push(item);
+        } else {
+          hariBlocks.push({
+            hariLabel: item.hariLabel,
+            dayPrefix: item.dayPrefix,
+            cleanDate: item.cleanDate,
+            rows: [item]
+          });
+        }
+      });
+
+      let tbodyHTML = "";
+      hariBlocks.forEach((block, blockIdx) => {
+        const isLastBlock = blockIdx === hariBlocks.length - 1;
+        const rowCount = block.rows.length;
+
+        block.rows.forEach((r, rIdx) => {
+          const isLastRowInBlock = rIdx === rowCount - 1;
+          const dividerClass = (!isLastBlock && isLastRowInBlock) ? "wilayah-divider" : "";
+
+          tbodyHTML += `<tr class="${dividerClass}">`;
+          if (rIdx === 0) {
+            tbodyHTML += `
+              <td class="col-hari ${!isLastBlock ? 'wilayah-divider' : ''}" rowspan="${rowCount}">
+                ${escapeHTML(block.dayPrefix)}<br>${escapeHTML(block.cleanDate)}
+              </td>`;
+          }
+          tbodyHTML += `
+            <td class="col-jam">${escapeHTML(r.jam)}</td>
+            <td class="col-asal">${escapeHTML(r.petugasAsal)}</td>
+            <td class="col-nama">${formatPasutriNames(r.namaSuami, r.namaIstri)}</td>
+          </tr>`;
+        });
+      });
+
+      return `
+        <section class="report-sheet">
+          <header class="report-header">
+            <img src="images/logoK7.png" alt="Katedral Jakarta" class="logo-left" />
+            <div class="header-center">
+              <h1 class="report-title">PASUTRI PENYALA LILIN ADVEN</h1>
+              <p class="lilin-subtitle">${escapeHTML(page.title)}</p>
+            </div>
+            <img src="images/st_theresia.png" alt="St. Theresia DKKY" class="logo-right" />
+          </header>
+
+          <div class="table-wrapper">
+            <table class="korona-table lilin-table">
+              <thead>
+                <tr>
+                  <th class="col-hari">Hari</th>
+                  <th class="col-jam">Jam Misa</th>
+                  <th class="col-asal">Petugas</th>
+                  <th class="col-nama">Nama</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tbodyHTML}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      `;
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
