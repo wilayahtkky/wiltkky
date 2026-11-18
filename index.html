@@ -156,10 +156,10 @@
         </div>
       </section>
 
-      <!-- TAB 2: NATAL -->
+<!-- TAB 2: NATAL -->
       <section id="panel-natal" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-btn-natal">
         <div class="natal-center-links">
-          <a href="#jadwal-misa-natal" class="link-card" data-placeholder="true">
+          <a href="#jadwal-misa-natal" id="btn-jadwal-natal" class="link-card">
             <span class="link-title">Jadwal Misa Natal</span>
             <span class="link-arrow">→</span>
           </a>
@@ -187,7 +187,43 @@
       <p id="lightbox-caption"></p>
     </div>
   </div>
+  
+<!-- JADWAL MISA NATAL POP-UP MODAL -->
+  <div id="natal-modal" class="lightbox" aria-hidden="true">
+    <button id="natal-modal-close" class="lightbox-close" aria-label="Tutup Jadwal">&times;</button>
+    <div class="natal-poster-card">
+      <div class="natal-poster-body">
+        <hr class="natal-divider" />
+        <h2 class="natal-heading">Malam Natal</h2>
+        <p class="natal-date">Kamis, 24 Desember 2026</p>
+        <p class="natal-time">17.00 WIB</p>
+        <p class="natal-time">20.30 WIB</p>
 
+        <hr class="natal-divider" />
+        <h2 class="natal-heading">Hari Raya Natal</h2>
+        <p class="natal-date">Jumat, 25 Desember 2026</p>
+        <div class="natal-schedule-list">
+          <div class="natal-schedule-row">
+            <span class="natal-time-col">08.30 WIB</span>
+            <span class="natal-label-col">Misa Pontifikal</span>
+          </div>
+          <div class="natal-schedule-row">
+            <span class="natal-time-col">11.00 WIB</span>
+            <span class="natal-label-col">Misa Keluarga</span>
+          </div>
+          <div class="natal-schedule-row">
+            <span class="natal-time-col">17.00 WIB</span>
+            <span class="natal-label-col"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="natal-poster-art">
+        <img src="images/Oliverart.png" alt="Artwork by Oliver Wihardja" />
+      </div>
+    </div>
+  </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
