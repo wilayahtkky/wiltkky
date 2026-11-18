@@ -94,6 +94,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // ================= JADWAL MISA NATAL MODAL =================
+  const btnJadwalNatal = document.getElementById('btn-jadwal-natal');
+  const natalModal = document.getElementById('natal-modal');
+  const natalModalClose = document.getElementById('natal-modal-close');
+
+  function openNatalModal() {
+    natalModal.classList.add('open');
+    natalModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNatalModal() {
+    natalModal.classList.remove('open');
+    natalModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (btnJadwalNatal && natalModal) {
+    btnJadwalNatal.addEventListener('click', (e) => {
+      e.preventDefault();
+      openNatalModal();
+    });
+
+    natalModalClose.addEventListener('click', closeNatalModal);
+
+    natalModal.addEventListener('click', (e) => {
+      if (e.target === natalModal) {
+        closeNatalModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && natalModal.classList.contains('open')) {
+        closeNatalModal();
+      }
+    });
+  }
+
+  
   // Placeholder alert for links without final URLs yet
   document.querySelectorAll('a[data-placeholder="true"]').forEach((link) => {
     link.addEventListener('click', (e) => {
