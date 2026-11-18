@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Susunan Panitia Natal 2026 - Wilayah Theresia DKKY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylepanitia.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header dengan Logo Kiri & Kanan -->
+        <header class="main-header">
+            <div class="logo-box left">
+                <img src="images/logoK7.png" alt="Logo Katedral Jakarta">
+            </div>
+            <div class="title-box">
+                <div class="christmas-badge">🎄 Natal 2026</div>
+                <h1>SUSUNAN PANITIA NATAL 2026</h1>
+                <h2>Wilayah Theresia DKKY</h2>
+            </div>
+            <div class="logo-box right">
+                <img src="images/st_theresia.png" alt="Logo St. Theresia DKKY">
+            </div>
+        </header>
+
+        <!-- Bar Pencarian & Kontrol Cepat -->
+        <div class="controls-bar">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Cari nama panitia atau seksi..." autocomplete="off">
+                <button type="button" id="clearSearch" class="clear-btn" title="Hapus pencarian" hidden>✕</button>
+            </div>
+            <div class="action-buttons">
+                <button type="button" id="toggleAllBtn" class="btn-outline">Tutup Semua Seksi</button>
+            </div>
+        </div>
+        <div id="searchStatus" class="search-status" hidden></div>
+
+        <!-- Struktur Organisasi / Diagram -->
+        <main class="org-container">
+            
+            <!-- LEVEL 1: KETUA & WAKIL KETUA -->
+            <section class="level-top">
+                <div class="card card-leader searchable-item" data-search="eyo ketua">
+                    <div class="leader-name">Eyo</div>
+                    <div class="leader-role">Ketua</div>
+                </div>
+                <div class="connector-v-short"></div>
+                <div class="card card-leader searchable-item" data-search="henry pangestu wakil ketua">
+                    <div class="leader-name">Henry Pangestu</div>
+                    <div class="leader-role">Wakil Ketua</div>
+                </div>
+            </section>
+
+            <!-- Garis Penghubung ke Bendahara & Sekretaris -->
+            <div class="tree-connector-mid">
+                <div class="line-v-center"></div>
+                <div class="line-h-mid"></div>
+            </div>
+
+            <!-- LEVEL 2: BENDAHARA & SEKRETARIAT -->
+            <section class="level-mid">
+                <!-- Bendahara -->
+                <div class="card card-unit collapsible-card">
+                    <div class="card-header toggle-header">
+                        <h3>Bendahara</h3>
+                        <span class="chevron">▾</span>
+                    </div>
+                    <div class="card-body">
+                        <ol class="member-list">
+                            <li class="searchable-item">Lucia Budiono</li>
+                            <li class="searchable-item">Caroline</li>
+                            <li class="searchable-item">Marline</li>
+                            <li class="searchable-item">Fung fung</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Sekretariat -->
+                <div class="card card-unit collapsible-card">
+                    <div class="card-header toggle-header">
+                        <h3>Sekretariat</h3>
+                        <span class="chevron">▾</span>
+                    </div>
+                    <div class="card-body">
+                        <ol class="member-list">
+                            <li class="searchable-item">Lily Gemini</li>
+                            <li class="searchable-item">Mien</li>
+                            <li class="searchable-item">Cai Ing (PICMedis)</li>
+                            <li class="searchable-item">Evo (dig media)</li>
+                            <li class="searchable-item">Sianly (dig media)</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Garis Penghubung ke Bidang I, II, III -->
+            <div class="tree-connector-bottom">
+                <div class="line-v-center"></div>
+                <div class="line-h-bottom"></div>
+            </div>
+
+            <!-- LEVEL 3: BIDANG I, II, III -->
+            <section class="level-bottom">
+                
+                <!-- BIDANG I (LITURGI) -->
+                <div class="card card-bidang bidang-1 collapsible-card">
+                    <div class="bidang-header toggle-header">
+                        <div class="bidang-title-group">
+                            <h3>BIDANG I<br><span>(LITURGI)</span></h3>
+                            <div class="kabid-info searchable-item">
+                                <strong>FX Setya Buntoro</strong>
+                                <span>Kabid</span>
+                            </div>
+                        </div>
+                        <span class="chevron">▾</span>
+                    </div>
+                    <div class="card-body">
+                        <ol class="member-list">
+                            <li class="searchable-item">Helena</li>
+                            <li class="searchable-item">Katrina</li>
+                            <li class="searchable-item">Ela</li>
+                            <li class="searchable-item">Claire</li>
+                            <li class="searchable-item">Warti</li>
+                            <li class="searchable-item">Anik</li>
+                        </ol>
+                    </div>
+                    <div class="card-footer pic-footer searchable-item">
+                        <div><strong>Bend :</strong> Lucia</div>
+                        <div><strong>Sekr :</strong> Lily Gemini</div>
+                    </div>
+                </div>
+
+                <!-- BIDANG II (NON-LITURGI) -->
+                <div class="card card-bidang bidang-2">
+                    <div class="bidang-header">
+                        <div class="bidang-title-group">
+                            <h3>BIDANG II (NON-LITURGI)</h3>
+                            <div class="kabid-info searchable-item">
+                                <strong>Rudy Handoyo</strong>
+                                <span>Kabid</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sub-bidang-grid">
+                        <!-- Perlengkapan -->
+                        <div class="sub-seksi collapsible-card">
+                            <div class="sub-header toggle-header">
+                                <div>
+                                    <h4>Perlengkapan</h4>
+                                    <div class="koord-info searchable-item">
+                                        <strong>Tjin Ivan F.</strong>
+                                        <span>Koordinator</span>
+                                    </div>
+                                </div>
+                                <span class="chevron">▾</span>
+                            </div>
+                            <div class="card-body">
+                                <ol class="member-list">
+                                    <li class="searchable-item">Anung</li>
+                                    <li class="searchable-item">Albert</li>
+                                    <li class="searchable-item">Wahyu</li>
+                                    <li class="searchable-item">Yoseph</li>
+                                    <li class="searchable-item">Sofjan</li>
+                                    <li class="searchable-item">Samuel I.</li>
+                                </ol>
+                            </div>
+                            <div class="sub-footer pic-footer searchable-item">
+                                <div><strong>Bend :</strong> Caroline</div>
+                                <div><strong>Sekr :</strong> Lily Gemini</div>
+                            </div>
+                        </div>
+
+                        <!-- Amplop & Screening -->
+                        <div class="sub-seksi sub-wide collapsible-card">
+                            <div class="sub-header toggle-header">
+                                <div>
+                                    <h4>Amplop & Screening</h4>
+                                    <div class="koord-info searchable-item">
+                                        <strong>Ig Sarlius Ferdinandus</strong>
+                                        <span>Koordinator</span>
+                                    </div>
+                                </div>
+                                <span class="chevron">▾</span>
+                            </div>
+                            <div class="card-body">
+                                <ol class="member-list multi-col-list">
+                                    <li class="searchable-item">Ipung</li>
+                                    <li class="searchable-item">Linda</li>
+                                    <li class="searchable-item">Nana</li>
+                                    <li class="searchable-item">Santi</li>
+                                    <li class="searchable-item">Tata</li>
+                                    <li class="searchable-item">Sindy</li>
+                                    <li class="searchable-item">Ety</li>
+                                    <li class="searchable-item">Selvi</li>
+                                    <li class="searchable-item">Imelda</li>
+                                    <li class="searchable-item">Titi Saria</li>
+                                    <li class="searchable-item">Inawati</li>
+                                    <li class="searchable-item">Siu Mei</li>
+                                    <li class="searchable-item">Chandra</li>
+                                    <li class="searchable-item">Yuliana</li>
+                                    <li class="searchable-item">Martin</li>
+                                    <li class="searchable-item">Rosalina</li>
+                                </ol>
+                            </div>
+                            <div class="sub-footer pic-footer searchable-item">
+                                <div><strong>Bend :</strong> Caroline</div>
+                                <div><strong>Sekr :</strong> Lily Gemini</div>
+                            </div>
+                        </div>
+
+                        <!-- Konsumsi -->
+                        <div class="sub-seksi collapsible-card">
+                            <div class="sub-header toggle-header">
+                                <div>
+                                    <h4>Konsumsi</h4>
+                                    <div class="koord-info searchable-item">
+                                        <strong>Lily Pelawi</strong>
+                                        <span>Koordinator</span>
+                                    </div>
+                                </div>
+                                <span class="chevron">▾</span>
+                            </div>
+                            <div class="card-body">
+                                <ol class="member-list">
+                                    <li class="searchable-item">Lusyana</li>
+                                    <li class="searchable-item">Melly</li>
+                                    <li class="searchable-item">Fenty</li>
+                                    <li class="searchable-item">Silvia</li>
+                                    <li class="searchable-item">Rina</li>
+                                    <li class="searchable-item">Fenny</li>
+                                    <li class="searchable-item">Yayuk</li>
+                                </ol>
+                            </div>
+                            <div class="sub-footer pic-footer searchable-item">
+                                <div><strong>Bend :</strong> Marline</div>
+                                <div><strong>Sekr :</strong> Lily Gemini</div>
+                            </div>
+                        </div>
+
+                        <!-- Dekorasi -->
+                        <div class="sub-seksi collapsible-card">
+                            <div class="sub-header toggle-header">
+                                <div>
+                                    <h4>Dekorasi</h4>
+                                    <div class="koord-info searchable-item">
+                                        <strong>Yohanes</strong>
+                                        <span>Koordinator</span>
+                                    </div>
+                                </div>
+                                <span class="chevron">▾</span>
+                            </div>
+                            <div class="card-body">
+                                <ol class="member-list">
+                                    <li class="searchable-item">Indra</li>
+                                    <li class="searchable-item">Netta</li>
+                                    <li class="searchable-item">Rovina</li>
+                                </ol>
+                            </div>
+                            <div class="sub-footer pic-footer searchable-item">
+                                <div><strong>Bend :</strong> Fung Fung</div>
+                                <div><strong>Sekr :</strong> Mien</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BIDANG III (ACARA) -->
+                <div class="card card-bidang bidang-3 collapsible-card">
+                    <div class="bidang-header toggle-header">
+                        <div class="bidang-title-group">
+                            <h3>BIDANG III<br><span>(ACARA)</span></h3>
+                            <div class="kabid-info searchable-item">
+                                <strong>Sugiati</strong>
+                                <span>Kabid</span>
+                            </div>
+                        </div>
+                        <span class="chevron">▾</span>
+                    </div>
+                    <div class="card-body">
+                        <ol class="member-list">
+                            <li class="searchable-item">Nova</li>
+                            <li class="searchable-item">Titis</li>
+                            <li class="searchable-item">Yeyen</li>
+                            <li class="searchable-item">Alda</li>
+                        </ol>
+                    </div>
+                    <div class="card-footer pic-footer searchable-item">
+                        <div><strong>Bend :</strong> Fung Fung</div>
+                        <div><strong>Sekr :</strong> Mien</div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>Panitia Natal 2026 &bull; Wilayah Theresia DKKY &bull; Katedral Jakarta</p>
+        </footer>
+    </div>
+
+    <script src="scriptpanitia.js"></script>
+</body>
+</html>
