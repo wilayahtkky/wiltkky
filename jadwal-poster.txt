@@ -1,0 +1,6 @@
+# Format: poster-id = YYYY-MM-DDTHH:mm:ss+07:00
+# Leave blank or comment out (#) if you don't want a poster to hide yet
+
+poster-1 = 2026-11-20T23:59:59+07:00
+poster-2 = 2026-11-29T23:59:59+07:00
+poster-3 = 2026-12-20T00:00:00+07:00

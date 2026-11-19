@@ -2,6 +2,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
+// ================= AUTO-HIDE POSTERS FROM TEXT FILE =================
+  fetch('jadwal-poster.txt', { cache: 'no-store' })
+    .then((response) => {
+      if (!response.ok) throw new Error('jadwal-poster.txt not found');
+      return response.text();
+    })
+    .then((text) => {
+      const currentNow = new Date();
+
+      text.split(/\r?\n/).forEach((line) => {
+        const cleanLine = line.trim();
+        // Skip empty lines and comments
+        if (!cleanLine || cleanLine.startsWith('#')) return;
+
+        const [posterId, dateStr] = cleanLine.split('=').map((part) => part.trim());
+        if (!posterId || !dateStr) return;
+
+        const hideDate = new Date(dateStr);
+        if (!isNaN(hideDate) && currentNow >= hideDate) {
+          const card = document.querySelector(`.poster-card[data-poster-id="${posterId}"]`);
+          if (card) {
+            card.style.display = 'none';
+          }
+        }
+      });
+    })
+    .catch((err) => console.warn('Schedule file skipped:', err));
+
+
   // Function to switch active tab
   function activateTab(tabName) {
     tabButtons.forEach((btn) => {
