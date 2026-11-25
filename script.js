@@ -1,6 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
+  
+// ================= TATA CARA MENYALAKAN LILIN ADVEN MODAL =================
+  const btnTataCaraLilin = document.getElementById('btn-tata-cara-lilin');
+  const tatacaraModal = document.getElementById('tatacara-modal');
+  const tatacaraModalClose = document.getElementById('tatacara-modal-close');
+
+  function openTatacaraModal() {
+    tatacaraModal.classList.add('open');
+    tatacaraModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeTatacaraModal() {
+    tatacaraModal.classList.remove('open');
+    tatacaraModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+
+    // Hentikan video YouTube saat modal ditutup
+    const iframe = tatacaraModal.querySelector('iframe');
+    if (iframe) {
+      const currentSrc = iframe.src;
+      iframe.src = currentSrc;
+    }
+  }
+
+  if (btnTataCaraLilin && tatacaraModal) {
+    btnTataCaraLilin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openTatacaraModal();
+    });
+
+    tatacaraModalClose.addEventListener('click', closeTatacaraModal);
+
+    tatacaraModal.addEventListener('click', (e) => {
+      if (e.target === tatacaraModal) {
+        closeTatacaraModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && tatacaraModal.classList.contains('open')) {
+        closeTatacaraModal();
+      }
+    });
+  }
+  
 
 // ================= AUTO-HIDE POSTERS FROM TEXT FILE =================
   fetch('jadwal-poster.txt', { cache: 'no-store' })
