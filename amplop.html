@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Petugas Amplop Adven 2026 - Katedral Jakarta</title>
+  <link rel="stylesheet" href="style-amplop.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header dengan Logo Katedral -->
+    <header class="page-header">
+      <div class="header-top">
+        <img src="images/logoK7.png" alt="Logo K7" class="header-logo" onerror="this.style.visibility='hidden'" />
+        <div class="header-title-wrap">
+          <span class="header-badge">ADVEN 2026</span>
+          <h1>Jadwal Petugas Amplop</h1>
+          <p class="header-subtitle">Gereja Katedral Jakarta</p>
+        </div>
+        <img src="images/st_theresia.png" alt="Logo St. Theresia" class="header-logo" onerror="this.style.visibility='hidden'" />
+      </div>
+
+      <!-- Status Admin Aktif (muncul hanya saat sudah login) -->
+      <div id="adminBanner" class="admin-banner hidden">
+        <span>Mode Admin Aktif — Klik ikon pensil untuk mengubah nama</span>
+        <button type="button" id="btnLogoutAdmin" class="btn-logout">Keluar</button>
+      </div>
+    </header>
+
+    <!-- Panel Filter -->
+    <section class="filter-card" aria-label="Filter Jadwal">
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label for="filterAdven">Minggu Adven</label>
+          <select id="filterAdven">
+            <option value="">Semua Minggu Adven</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filterTanggal">Hari / Tanggal</label>
+          <select id="filterTanggal">
+            <option value="">Semua Hari / Tanggal</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filterJam">Jam Misa</label>
+          <select id="filterJam">
+            <option value="">Semua Jam Misa</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filterSearch">Cari Nama / Tim</label>
+          <input type="text" id="filterSearch" placeholder="Ketik nama petugas..." autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <span id="resultSummary" class="result-summary">Memuat jadwal...</span>
+        <div class="action-buttons">
+          <button type="button" id="btnRefresh" class="btn-secondary" title="Muat ulang data terbaru">Muat Ulang</button>
+          <button type="button" id="btnReset" class="btn-secondary">Reset Filter</button>
+        </div>
+      </div>
+
+      <!-- Legenda Warna Nama -->
+      <div class="legend-bar">
+        <span class="legend-item"><strong class="name-bold">Tebal</strong>: Koordinator / Inti</span>
+        <span class="legend-item"><span class="name-normal">Putih</span>: Petugas</span>
+        <span class="legend-item"><span class="name-red">Merah</span>: Petugas Tambahan / OMK</span>
+      </div>
+    </section>
+
+    <!-- Kontainer Jadwal -->
+    <main id="scheduleContainer" class="schedule-container">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p>Mengambil data jadwal dari server...</p>
+      </div>
+    </main>
+
+    <!-- Footer & Akses Mode Admin -->
+    <footer class="page-footer">
+      <p>Jadwal Petugas Amplop Adven 2026</p>
+      <button type="button" id="btnOpenAdminModal" class="btn-admin-link">Kelola Jadwal</button>
+    </footer>
+  </div>
+
+  <!-- Modal Login Admin -->
+  <div id="modalAdminLogin" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+    <div class="modal-card">
+      <h2 id="loginModalTitle">Masuk Mode Admin</h2>
+      <p class="modal-desc">Masukkan password untuk mengaktifkan fitur ubah nama petugas.</p>
+      <form id="formAdminLogin">
+        <label for="inputAdminPassword" class="sr-only">Password Admin</label>
+        <input type="password" id="inputAdminPassword" placeholder="Masukkan password..." required autocomplete="current-password" />
+        <p id="loginErrorMsg" class="modal-error hidden"></p>
+        <div class="modal-actions">
+          <button type="button" id="btnCancelLogin" class="btn-secondary">Batal</button>
+          <button type="submit" id="btnSubmitLogin" class="btn-primary">Masuk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit Nama Petugas -->
+  <div id="modalEditName" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal-card">
+      <h2 id="editModalTitle">Ubah Nama Petugas</h2>
+      <p id="editContextInfo" class="modal-desc"></p>
+      <form id="formEditName">
+        <input type="hidden" id="editRowIndex" />
+        <label for="inputNewName" class="field-label">Nama Petugas</label>
+        <input type="text" id="inputNewName" placeholder="Masukkan nama baru..." required maxlength="80" />
+
+        <div class="style-toggles">
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkIsBold" />
+            <span>Tebal (Bold)</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkIsRed" />
+            <span class="name-red">Warna Merah</span>
+          </label>
+        </div>
+
+        <p id="editErrorMsg" class="modal-error hidden"></p>
+        <div class="modal-actions">
+          <button type="button" id="btnCancelEdit" class="btn-secondary">Batal</button>
+          <button type="submit" id="btnSubmitEdit" class="btn-primary">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notifikasi Kustom -->
+  <div id="toastNotification" class="toast hidden" role="status"></div>
+
+  <script src="script-amplop.js"></script>
+</body>
+</html>
