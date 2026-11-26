@@ -168,7 +168,7 @@ function fetchScheduleData() {
     script.remove();
     scheduleContainer.innerHTML = `
       <div class="empty-box">
-        <p>Tidak dapat terhubung ke server, coba incognito atau masuk ke setting - google services - matikan allow Chrome Sign-n .</p>
+        <p>Tidak dapat terhubung ke server, coba incognito atau masuk ke setting - google services - matikan allow Chrome Sign-in.</p>
       </div>
     `;
   };
@@ -402,13 +402,11 @@ async function exportFilteredScheduleAsImage() {
     let tableRowsHtml = "";
 
     advenMap.forEach((hariMap, advenTitle) => {
-      // Hitung total baris slot di bawah Minggu Adven ini untuk rowspan kolom NO
       let totalAdvenRows = 0;
       hariMap.forEach(slotMap => {
         totalAdvenRows += slotMap.size;
       });
 
-      // Pecah teks "Minggu Adven I" menjadi 2 baris seperti di gambar asli ("MINGGU\nADVEN I")
       const formattedAdven = escapeHtml(advenTitle.toUpperCase()).replace(/^MINGGU\s+/, "MINGGU<br>");
 
       let advenRowCounter = 0;
@@ -417,8 +415,6 @@ async function exportFilteredScheduleAsImage() {
       hariEntries.forEach(([hariTitle, slotMap], hariIdx) => {
         const totalHariRows = slotMap.size;
         const isLastHariInAdven = (hariIdx === hariEntries.length - 1);
-
-        // Pecah "Sabtu, 28 November 2026" menjadi "Sabtu,<br>28 November 2026"
         const formattedHari = escapeHtml(hariTitle).replace(/,\s*/, ",<br>");
 
         const slotEntries = Array.from(slotMap.values());
@@ -426,7 +422,6 @@ async function exportFilteredScheduleAsImage() {
           advenRowCounter++;
           const isLastRowInAdven = (advenRowCounter === totalAdvenRows);
 
-          // Format nama dipisah koma menyamping dengan gaya Bold / Merah / Normal
           const namesHtml = slot.members.map(m => {
             let cls = "exp-name-normal";
             if (m.isBold) cls = "exp-name-bold";
@@ -472,32 +467,44 @@ async function exportFilteredScheduleAsImage() {
       </table>
     `;
 
-	const tableEl = document.getElementById("targetExportTable");
+    // Pastikan browser mengukur tinggi & lebar penuh tabel terlebih dahulu
+    exportRenderWrapper.style.visibility = "visible";
+    await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 60)));
 
-		// Beri jeda 1 frame agar browser HP selesai melukis DOM tabel sebelum difoto
-		await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 80)));
+    const fullWidth = exportRenderWrapper.offsetWidth;
+    const fullHeight = exportRenderWrapper.offsetHeight;
 
-		const canvas = await html2canvas(tableEl, {
-		  backgroundColor: "#ffffff",
-		  scale: 1.5,
-		  useCORS: true,
-		  logging: false,
-		  width: tableEl.offsetWidth,
-		  height: tableEl.offsetHeight,
-		  windowWidth: 980,
-		  windowHeight: tableEl.offsetHeight + 100,
-		  scrollX: 0,
-		  scrollY: 0,
-		  onclone: (clonedDoc) => {
-			const clonedWrapper = clonedDoc.getElementById("exportRenderWrapper");
-			if (clonedWrapper) {
-			  clonedWrapper.style.position = "static";
-			  clonedWrapper.style.zIndex = "1";
-			  clonedWrapper.style.opacity = "1";
-			  clonedWrapper.style.backgroundColor = "#ffffff";
-			}
-		  }
-		});
+    const canvas = await html2canvas(exportRenderWrapper, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      x: 0,
+      y: 0,
+      width: fullWidth,
+      height: fullHeight,
+      windowWidth: fullWidth + 40,
+      windowHeight: fullHeight + 40,
+      scrollX: 0,
+      scrollY: 0,
+      onclone: (clonedDoc) => {
+        const clonedWrapper = clonedDoc.getElementById("exportRenderWrapper");
+        clonedDoc.body.innerHTML = "";
+        clonedDoc.body.style.margin = "0";
+        clonedDoc.body.style.padding = "0";
+        clonedDoc.body.style.background = "#ffffff";
+        clonedDoc.body.style.width = fullWidth + "px";
+        clonedDoc.body.style.height = fullHeight + "px";
+
+        clonedWrapper.style.position = "static";
+        clonedWrapper.style.visibility = "visible";
+        clonedWrapper.style.zIndex = "1";
+        clonedWrapper.style.margin = "0";
+        clonedDoc.body.appendChild(clonedWrapper);
+      }
+    });
+
+    exportRenderWrapper.style.visibility = "hidden";
 
     // Buat nama file dinamis sesuai filter yang aktif
     const parts = ["Jadwal_Amplop"];
@@ -506,14 +513,25 @@ async function exportFilteredScheduleAsImage() {
     if (filterJam.value) parts.push(filterJam.value.replace(/[^a-zA-Z0-9]+/g, "_"));
     const filename = parts.join("_") + ".png";
 
-    const link = document.createElement("a");
-    link.download = filename;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        showToast("Gagal mengonversi gambar.");
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = filename;
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
 
-    exportRenderWrapper.innerHTML = "";
-    showToast("Gambar jadwal berhasil diunduh.");
+      exportRenderWrapper.innerHTML = "";
+      showToast("Gambar jadwal berhasil diunduh.");
+    }, "image/png");
   } catch (err) {
+    exportRenderWrapper.style.visibility = "hidden";
     showToast("Gagal membuat gambar: " + (err.message || err));
   } finally {
     btnExportImage.disabled = false;
