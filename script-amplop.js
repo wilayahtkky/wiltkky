@@ -1,4 +1,3 @@
-// GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
 const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxd-CyCszwZtUMB1ENm2xvpRz0PLGSxa3H_wJ1v6H9KQ1uZ0Kyz56sUT1LTgftB_8rA/exec";
 
 // Referensi format asli (Bold & Merah) jika sel di Google Sheets masih plain text
@@ -24,6 +23,7 @@ const DEFAULT_RED_NAMES = new Set([
 ]);
 
 let allScheduleData = [];
+let currentFilteredData = [];
 let isAdminMode = false;
 let adminPassword = "";
 
@@ -35,11 +35,13 @@ const filterSearch = document.getElementById("filterSearch");
 const resultSummary = document.getElementById("resultSummary");
 const scheduleContainer = document.getElementById("scheduleContainer");
 
+const btnExportImage = document.getElementById("btnExportImage");
 const btnRefresh = document.getElementById("btnRefresh");
 const btnReset = document.getElementById("btnReset");
 const adminBanner = document.getElementById("adminBanner");
 const btnOpenAdminModal = document.getElementById("btnOpenAdminModal");
 const btnLogoutAdmin = document.getElementById("btnLogoutAdmin");
+const exportRenderWrapper = document.getElementById("exportRenderWrapper");
 
 // Modal Login
 const modalAdminLogin = document.getElementById("modalAdminLogin");
@@ -92,6 +94,7 @@ function bindEvents() {
   });
 
   btnRefresh.addEventListener("click", fetchScheduleData);
+  btnExportImage.addEventListener("click", exportFilteredScheduleAsImage);
 
   // Admin Login Modal
   btnOpenAdminModal.addEventListener("click", () => {
@@ -128,7 +131,7 @@ function bindEvents() {
   formEditName.addEventListener("submit", handleSaveEditedName);
 }
 
-// Ambil data dari Google Apps Script (menggunakan JSONP agar bebas masalah CORS di GitHub Pages)
+// Ambil data dari Google Apps Script
 function fetchScheduleData() {
   scheduleContainer.innerHTML = `
     <div class="loading-box">
@@ -165,7 +168,7 @@ function fetchScheduleData() {
     script.remove();
     scheduleContainer.innerHTML = `
       <div class="empty-box">
-        <p>Tidak dapat terhubung ke server Google Apps Script. Pastikan URL deployment sudah benar.</p>
+        <p>Tidak dapat terhubung ke server, coba incognito atau masuk ke setting - google services - matikan allow Chrome Sign-n .</p>
       </div>
     `;
   };
@@ -174,12 +177,11 @@ function fetchScheduleData() {
   document.body.appendChild(script);
 }
 
-// Pertahankan format Bold & Merah (dari properti Sheets maupun fallback daftar asli)
+// Pertahankan format Bold & Merah
 function enrichFormatFlags(item) {
   const lowerName = item.nama.toLowerCase().trim();
   const timKey = item.tim.trim();
 
-  // Pengecualian khusus: Anik di Adven IV Tim 2 tidak ada, sedangkan Eti di Adven IV Tim 2 Bold
   let fallbackBold = false;
   if (item.no.toLowerCase().includes("adven iv") && timKey === "Tim 2") {
     fallbackBold = ["anung", "eti"].includes(lowerName);
@@ -258,6 +260,8 @@ function renderSchedule() {
     }
     return true;
   });
+
+  currentFilteredData = filtered;
 
   if (filtered.length === 0) {
     resultSummary.textContent = "0 petugas ditemukan";
@@ -343,7 +347,6 @@ function renderSchedule() {
   resultSummary.textContent = `Menampilkan ${filtered.length} petugas dalam ${totalSlots} jadwal misa`;
   scheduleContainer.innerHTML = html;
 
-  // Pasang event listener untuk tombol edit jika mode admin aktif
   if (isAdminMode) {
     document.querySelectorAll(".btn-edit-name").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -351,6 +354,150 @@ function renderSchedule() {
         openEditModal(rowIdx);
       });
     });
+  }
+}
+
+// =========================================================
+// EXPORT TABEL GAMBAR PNG PERSIS SEPERTI GAMBAR PERTAMA
+// =========================================================
+async function exportFilteredScheduleAsImage() {
+  if (!currentFilteredData || currentFilteredData.length === 0) {
+    showToast("Tidak ada data jadwal untuk di-export.");
+    return;
+  }
+
+  if (typeof html2canvas === "undefined") {
+    showToast("Pustaka export gambar belum termuat. Periksa koneksi internet.");
+    return;
+  }
+
+  btnExportImage.disabled = true;
+  const originalText = btnExportImage.textContent;
+  btnExportImage.textContent = "Membuat Gambar...";
+
+  try {
+    // Susun hierarki: Minggu Adven -> Hari/Tanggal -> Slot (Jam Misa + TIM)
+    const advenMap = new Map();
+
+    currentFilteredData.forEach(item => {
+      if (!advenMap.has(item.no)) {
+        advenMap.set(item.no, new Map());
+      }
+      const hariMap = advenMap.get(item.no);
+      if (!hariMap.has(item.hariTanggal)) {
+        hariMap.set(item.hariTanggal, new Map());
+      }
+      const slotMap = hariMap.get(item.hariTanggal);
+      const slotKey = `${item.jamMisa}|||${item.tim}`;
+      if (!slotMap.has(slotKey)) {
+        slotMap.set(slotKey, {
+          jamMisa: item.jamMisa,
+          tim: item.tim,
+          members: []
+        });
+      }
+      slotMap.get(slotKey).members.push(item);
+    });
+
+    let tableRowsHtml = "";
+
+    advenMap.forEach((hariMap, advenTitle) => {
+      // Hitung total baris slot di bawah Minggu Adven ini untuk rowspan kolom NO
+      let totalAdvenRows = 0;
+      hariMap.forEach(slotMap => {
+        totalAdvenRows += slotMap.size;
+      });
+
+      // Pecah teks "Minggu Adven I" menjadi 2 baris seperti di gambar asli ("MINGGU\nADVEN I")
+      const formattedAdven = escapeHtml(advenTitle.toUpperCase()).replace(/^MINGGU\s+/, "MINGGU<br>");
+
+      let advenRowCounter = 0;
+      const hariEntries = Array.from(hariMap.entries());
+
+      hariEntries.forEach(([hariTitle, slotMap], hariIdx) => {
+        const totalHariRows = slotMap.size;
+        const isLastHariInAdven = (hariIdx === hariEntries.length - 1);
+
+        // Pecah "Sabtu, 28 November 2026" menjadi "Sabtu,<br>28 November 2026"
+        const formattedHari = escapeHtml(hariTitle).replace(/,\s*/, ",<br>");
+
+        const slotEntries = Array.from(slotMap.values());
+        slotEntries.forEach((slot, slotIdx) => {
+          advenRowCounter++;
+          const isLastRowInAdven = (advenRowCounter === totalAdvenRows);
+
+          // Format nama dipisah koma menyamping dengan gaya Bold / Merah / Normal
+          const namesHtml = slot.members.map(m => {
+            let cls = "exp-name-normal";
+            if (m.isBold) cls = "exp-name-bold";
+            else if (m.isRed) cls = "exp-name-red";
+            return `<span class="${cls}">${escapeHtml(m.nama)}</span>`;
+          }).join(", ");
+
+          tableRowsHtml += `<tr class="${isLastRowInAdven ? "adven-last-row" : ""}">`;
+
+          if (advenRowCounter === 1) {
+            tableRowsHtml += `<td class="col-no" rowspan="${totalAdvenRows}">${formattedAdven}</td>`;
+          }
+
+          if (slotIdx === 0) {
+            const hariCellClass = isLastHariInAdven ? "col-hari hari-last-cell" : "col-hari";
+            tableRowsHtml += `<td class="${hariCellClass}" rowspan="${totalHariRows}">${formattedHari}</td>`;
+          }
+
+          tableRowsHtml += `
+            <td class="col-jam">${escapeHtml(slot.jamMisa)}</td>
+            <td class="col-tim">${escapeHtml(slot.tim)}</td>
+            <td class="col-nama">${namesHtml}</td>
+          `;
+          tableRowsHtml += `</tr>`;
+        });
+      });
+    });
+
+    exportRenderWrapper.innerHTML = `
+      <table class="classic-export-table" id="targetExportTable">
+        <thead>
+          <tr>
+            <th>NO</th>
+            <th>HARI / TGL</th>
+            <th>JAM MISA</th>
+            <th>TIM</th>
+            <th>NAMA</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRowsHtml}
+        </tbody>
+      </table>
+    `;
+
+    const tableEl = document.getElementById("targetExportTable");
+    const canvas = await html2canvas(tableEl, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true
+    });
+
+    // Buat nama file dinamis sesuai filter yang aktif
+    const parts = ["Jadwal_Amplop"];
+    if (filterAdven.value) parts.push(filterAdven.value.replace(/\s+/g, "_"));
+    if (filterTanggal.value) parts.push(filterTanggal.value.replace(/[^a-zA-Z0-9]+/g, "_"));
+    if (filterJam.value) parts.push(filterJam.value.replace(/[^a-zA-Z0-9]+/g, "_"));
+    const filename = parts.join("_") + ".png";
+
+    const link = document.createElement("a");
+    link.download = filename;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+
+    exportRenderWrapper.innerHTML = "";
+    showToast("Gambar jadwal berhasil diunduh.");
+  } catch (err) {
+    showToast("Gagal membuat gambar: " + (err.message || err));
+  } finally {
+    btnExportImage.disabled = false;
+    btnExportImage.textContent = originalText;
   }
 }
 
@@ -453,7 +600,6 @@ async function handleSaveEditedName(e) {
       throw new Error(result.message || "Gagal menyimpan perubahan.");
     }
 
-    // Perbarui state lokal secara langsung
     const idx = allScheduleData.findIndex(item => item.rowIndex === rowIndex);
     if (idx !== -1) {
       allScheduleData[idx].nama = result.updated.nama;

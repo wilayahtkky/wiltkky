@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jadwal Petugas Amplop Adven 2026 - Katedral Jakarta</title>
   <link rel="stylesheet" href="style-amplop.css" />
+  <!-- Pustaka html2canvas untuk export jadwal terfilter ke gambar PNG -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="app-container">
@@ -20,7 +22,7 @@
         <img src="images/st_theresia.png" alt="Logo St. Theresia" class="header-logo" onerror="this.style.visibility='hidden'" />
       </div>
 
-      <!-- Status Admin Aktif (muncul hanya saat sudah login) -->
+      <!-- Status Admin Aktif -->
       <div id="adminBanner" class="admin-banner hidden">
         <span>Mode Admin Aktif — Klik ikon pensil untuk mengubah nama</span>
         <button type="button" id="btnLogoutAdmin" class="btn-logout">Keluar</button>
@@ -60,6 +62,9 @@
       <div class="filter-actions">
         <span id="resultSummary" class="result-summary">Memuat jadwal...</span>
         <div class="action-buttons">
+          <button type="button" id="btnExportImage" class="btn-export" title="Unduh tabel jadwal sesuai filter sebagai gambar PNG">
+            Export Gambar
+          </button>
           <button type="button" id="btnRefresh" class="btn-secondary" title="Muat ulang data terbaru">Muat Ulang</button>
           <button type="button" id="btnReset" class="btn-secondary">Reset Filter</button>
         </div>
@@ -68,7 +73,7 @@
       <!-- Legenda Warna Nama -->
       <div class="legend-bar">
         <span class="legend-item"><strong class="name-bold">Tebal</strong>: Koordinator / Inti</span>
-        <span class="legend-item"><span class="name-normal">Putih</span>: Petugas</span>
+        <span class="legend-item"><span class="name-normal">Hitam</span>: Petugas</span>
         <span class="legend-item"><span class="name-red">Merah</span>: Petugas Tambahan / OMK</span>
       </div>
     </section>
@@ -87,6 +92,9 @@
       <button type="button" id="btnOpenAdminModal" class="btn-admin-link">Kelola Jadwal</button>
     </footer>
   </div>
+
+  <!-- Area Tersembunyi untuk Merender Tabel Gambar Persis Format Asli -->
+  <div id="exportRenderWrapper" class="export-offscreen" aria-hidden="true"></div>
 
   <!-- Modal Login Admin -->
   <div id="modalAdminLogin" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
@@ -138,6 +146,6 @@
   <!-- Toast Notifikasi Kustom -->
   <div id="toastNotification" class="toast hidden" role="status"></div>
 
-  <script src="script-amplop.js?v=2"></script>
+  <script src="script-amplop.js"></script>
 </body>
 </html>
