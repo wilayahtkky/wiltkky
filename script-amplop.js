@@ -85,11 +85,13 @@ function bindEvents() {
   filterJam.addEventListener("change", renderSchedule);
   filterSearch.addEventListener("input", renderSchedule);
 
-  btnReset.addEventListener("click", () => {
+btnReset.addEventListener("click", () => {
     filterAdven.value = "";
+    filterTanggal.value = "";
+    filterJam.value = "";
+    filterSearch.value = "";
     populateTanggalOptions();
     populateJamOptions();
-    filterSearch.value = "";
     renderSchedule();
   });
 
