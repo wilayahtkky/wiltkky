@@ -326,6 +326,29 @@ body {
   transform: translate(3px, -2px);
 }
 
+/* ================= TOMBOL KHUSUS TEMA NATAL (MERAH & HIJAU LIS EMAS) ================= */
+.link-card.link-card-natal {
+  background: linear-gradient(135deg, rgba(138, 18, 28, 0.88) 0%, rgba(16, 74, 42, 0.88) 100%);
+  border: 1.5px solid var(--gold-primary);
+  border-left: 5px solid var(--gold-light);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 0 12px rgba(229, 193, 88, 0.15);
+}
+
+.link-card.link-card-natal .link-title {
+  color: var(--gold-light);
+}
+
+.link-card.link-card-natal .link-arrow {
+  color: var(--gold-light);
+}
+
+.link-card.link-card-natal:hover {
+  background: linear-gradient(135deg, rgba(168, 22, 34, 0.95) 0%, rgba(22, 96, 55, 0.95) 100%);
+  border-color: var(--gold-light);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65), 0 0 18px rgba(229, 193, 88, 0.45);
+  transform: translateY(-2px);
+}
+
 /* ================= NATAL CENTERED LAYOUT ================= */
 .natal-center-links {
   max-width: 520px;
