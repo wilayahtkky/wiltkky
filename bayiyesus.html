@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petugas Pembawa Bayi Yesus &amp; Pembaca Doa - Malam Natal 2026</title>
+  <link rel="icon" type="image/png" href="images/candle.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f7faf8;
+      color: #1f2937;
+      line-height: 1.55;
+      padding: 1.25rem 1rem 2.5rem;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* Header Top Bar & Tombol Tutup */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid #d1e2d8;
+    }
+
+    .brand-info {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .brand-info img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .brand-text h1 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0b4f32;
+      line-height: 1.25;
+    }
+
+    .brand-text p {
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .btn-close-page {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background-color: #0b4f32;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 0.95rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-close-page:hover {
+      background-color: #083b25;
+    }
+
+    .btn-close-page:active {
+      transform: scale(0.97);
+    }
+
+    /* Judul Tanggal */
+    .page-subtitle {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 1rem;
+    }
+
+    /* Kartu Jadwal (Accordion Sesuai Gambar) */
+    .schedule-card {
+      background-color: #ffffff;
+      border: 1px solid #b8d8c6;
+      border-radius: 12px;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(11, 79, 50, 0.06);
+    }
+
+    .card-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #e4f1e9;
+      border: none;
+      border-bottom: 1px solid #c5e0d1;
+      padding: 0.95rem 1.25rem;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .schedule-card.is-collapsed .card-header {
+      border-bottom: none;
+    }
+
+    .mass-time {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #064e3b;
+      letter-spacing: 0.01em;
+    }
+
+    .toggle-icon {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #064e3b;
+      line-height: 1;
+    }
+
+    .card-body {
+      padding: 1.1rem 1.25rem 1.25rem;
+    }
+
+    .schedule-card.is-collapsed .card-body {
+      display: none;
+    }
+
+    .role-group {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .role-group:first-child {
+      padding-top: 0;
+    }
+
+    .role-group:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .role-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.45rem;
+    }
+
+    .petugas-list {
+      list-style: none;
+      padding-left: 0.15rem;
+    }
+
+    .petugas-list li {
+      position: relative;
+      padding-left: 1rem;
+      font-size: 0.98rem;
+      color: #1f2937;
+      margin-bottom: 0.25rem;
+    }
+
+    .petugas-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .petugas-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #111827;
+      font-weight: 700;
+    }
+
+    /* Footer */
+    .bottom-actions {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-note {
+      margin-top: 1.25rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER & TOMBOL TUTUP -->
+    <header class="top-bar">
+      <div class="brand-info">
+        <img src="images/st_theresia.png" alt="Wil. Theresia" onerror="this.style.display='none'" />
+        <div class="brand-text">
+          <h1>Petugas Misa Malam Natal</h1>
+          <p>Wil. Theresia dari Kanak-Kanak Yesus</p>
+        </div>
+      </div>
+      <button type="button" class="btn-close-page" onclick="tutupHalaman()" aria-label="Tutup Halaman">
+        &times; Tutup
+      </button>
+    </header>
+
+    <h2 class="page-subtitle">Petugas pada 24 Desember 2026</h2>
+
+    <!-- JADWAL 17:00 -->
+    <section class="schedule-card">
+      <button type="button" class="card-header" onclick="toggleCard(this)" aria-expanded="true">
+        <span class="mass-time">17:00</span>
+        <span class="toggle-icon">&minus;</span>
+      </button>
+      <div class="card-body">
+        <div class="role-group">
+          <h3 class="role-title">Pasutri Pembawa Bayi dan Pembaca Doa</h3>
+          <ul class="petugas-list">
+            <li>Ferdi</li>
+            <li>Eti</li>
+          </ul>
+        </div>
+
+        <div class="role-group">
+          <h3 class="role-title">Pembaca Doa Remaja</h3>
+          <ul class="petugas-list">
+            <li>Justin</li>
+            <li>Sianly</li>
+          </ul>
+        </div>
+
+        <div class="role-group">
+          <h3 class="role-title">Pembaca Doa Anak</h3>
+          <ul class="petugas-list">
+            <li>Jovan</li>
+            <li>Abel</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- JADWAL 20:30 -->
+    <section class="schedule-card">
+      <button type="button" class="card-header" onclick="toggleCard(this)" aria-expanded="true">
+        <span class="mass-time">20:30</span>
+        <span class="toggle-icon">&minus;</span>
+      </button>
+      <div class="card-body">
+        <div class="role-group">
+          <h3 class="role-title">Pasutri Pembawa Bayi dan Pembaca Doa</h3>
+          <ul class="petugas-list">
+            <li>Wahyu</li>
+            <li>Linda</li>
+          </ul>
+        </div>
+
+        <div class="role-group">
+          <h3 class="role-title">Pembaca Doa Remaja</h3>
+          <ul class="petugas-list">
+            <li>Jojo Ina</li>
+            <li>Claire</li>
+          </ul>
+        </div>
+
+        <div class="role-group">
+          <h3 class="role-title">Pembaca Doa Anak</h3>
+          <ul class="petugas-list">
+            <li>Dion</li>
+            <li>lovely (Yosep brury)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-actions">
+      <button type="button" class="btn-close-page" onclick="tutupHalaman()">
+        &times; Tutup Halaman
+      </button>
+    </div>
+
+    <footer class="footer-note">
+      Panitia Natal 2026 - Katedral Jakarta | Wil. Theresia dari Kanak-Kanak Yesus
+    </footer>
+  </div>
+
+  <script>
+    function toggleCard(btn) {
+      const card = btn.closest('.schedule-card');
+      const icon = btn.querySelector('.toggle-icon');
+      const isCollapsed = card.classList.toggle('is-collapsed');
+      btn.setAttribute('aria-expanded', !isCollapsed);
+      icon.innerHTML = isCollapsed ? '+' : '&minus;';
+    }
+
+    function tutupHalaman() {
+      window.close();
+      // Fallback jika browser memblokir window.close() karena tab dibuka langsung
+      setTimeout(function () {
+        if (!window.closed) {
+          if (window.history.length > 1) {
+            window.history.back();
+          } else {
+            window.location.href = 'index.html';
+          }
+        }
+      }, 150);
+    }
+  </script>
+</body>
+</html>
