@@ -472,12 +472,32 @@ async function exportFilteredScheduleAsImage() {
       </table>
     `;
 
-    const tableEl = document.getElementById("targetExportTable");
-    const canvas = await html2canvas(tableEl, {
-      backgroundColor: "#ffffff",
-      scale: 2,
-      useCORS: true
-    });
+	const tableEl = document.getElementById("targetExportTable");
+
+		// Beri jeda 1 frame agar browser HP selesai melukis DOM tabel sebelum difoto
+		await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 80)));
+
+		const canvas = await html2canvas(tableEl, {
+		  backgroundColor: "#ffffff",
+		  scale: 1.5,
+		  useCORS: true,
+		  logging: false,
+		  width: tableEl.offsetWidth,
+		  height: tableEl.offsetHeight,
+		  windowWidth: 980,
+		  windowHeight: tableEl.offsetHeight + 100,
+		  scrollX: 0,
+		  scrollY: 0,
+		  onclone: (clonedDoc) => {
+			const clonedWrapper = clonedDoc.getElementById("exportRenderWrapper");
+			if (clonedWrapper) {
+			  clonedWrapper.style.position = "static";
+			  clonedWrapper.style.zIndex = "1";
+			  clonedWrapper.style.opacity = "1";
+			  clonedWrapper.style.backgroundColor = "#ffffff";
+			}
+		  }
+		});
 
     // Buat nama file dinamis sesuai filter yang aktif
     const parts = ["Jadwal_Amplop"];

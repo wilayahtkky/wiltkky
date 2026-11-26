@@ -601,13 +601,16 @@ body {
 }
 
 /* =========================================================
-   GAYA KHUSUS EXPORT GAMBAR TABEL (PERSIS GAMBAR PERTAMA)
+   GAYA KHUSUS EXPORT GAMBAR TABEL (KOMPATIBEL MOBILE & DESKTOP)
    ========================================================= */
 .export-offscreen {
   position: fixed;
-  left: -9999px;
+  left: 0;
   top: 0;
-  z-index: -1;
+  width: 944px;
+  z-index: -9999;
+  opacity: 1;
+  pointer-events: none;
   background: #ffffff;
   padding: 12px;
 }
@@ -616,10 +619,11 @@ body {
   width: 920px;
   border-collapse: collapse;
   background-color: #ffffff;
-  font-family: Calibri, "Segoe UI", Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: #000000;
   border: 2px solid #000000;
+  -webkit-font-smoothing: antialiased;
 }
 
 .classic-export-table th {
