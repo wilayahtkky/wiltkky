@@ -133,17 +133,30 @@
       background-color: #fcfdfc;
       border: 1px solid #e2ece9;
       border-left: 4px solid #2d6a4f;
-	  border-right: 2px solid #2d6a4f;
+      border-right: 2px solid #2d6a4f;
       border-top: 4px solid #2d6a4f;
-	  border-bottom: 2px solid #2d6a4f;
-	  padding: 16px;
+      border-bottom: 2px solid #2d6a4f;
+      padding: 16px;
       border-radius: 6px;
     }
 
     .info-box h3 {
       font-size: 1.1rem;
       color: #1b4d3e;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    /* Kotak Tanggal Besar Center */
+    .date-banner {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1b4d3e;
+      background-color: #e2ece9;
+      border: 2px solid #2d6a4f;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
     }
 
     .info-box ul {
@@ -168,6 +181,20 @@
       display: inline-block;
     }
 
+    /* Gambar Renungan Tobat */
+    .tobat-image-wrapper {
+      margin-top: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tobat-image-wrapper img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
     /* Footer (Menyesuaikan .form-footer) */
     .page-footer {
       text-align: center;
@@ -188,10 +215,15 @@
       <div class="subtitle">Tanggal dan daftar Imam yang melayani Pengakuan Dosa</div>
     </div>
 
-      <div class="content-wrapper">
+    <div class="content-wrapper">
       <!-- Keterangan -->
       <div class="info-box">
         <h3>Sakramen Tobat</h3>
+        
+        <div class="date-banner">
+          Selasa, 8 Desember 2026 s/d Kamis 11 Desember 2026
+        </div>
+
         <ul>
           <li>Sakramen Tobat dimulai pukul <span class="highlight-time">18.30 - 21.00</span></li>
           <li>Menggunakan kartu Antrian melalui petugas</li>
@@ -201,97 +233,17 @@
         </ul>
       </div>
 
+      <!-- Gambar 1 Yohanes 1:9 -->
+      <div class="tobat-image-wrapper">
+        <img src="tobat.jpg" alt="1 Yohanes 1:9 - Sakramen Tobat">
+      </div>
     </div>
 	 
-      <!-- Tabel Jadwal -->
-      <div class="schedule-section">
-        <div class="table-responsive">
-          <table>
-            <thead>
-<!--              <tr>
-                <th>Tanggal</th>
-                <th>Nama Romo</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-              <!-- Selasa, 08 Desember 2026 -->
-<!--              <tr>
-                <td class="date-cell">Selasa - 08 Desember 2026</td>
-                <td>
-                  <ol class="priest-list">
-                    <li>Rm. Maharsono, SJ</li>
-                    <li>Rm. Deodatus, SJ</li>
-                    <li>Rm. Amsori, CP</li>
-                    <li>Rm. Theo, CP</li>
-                    <li>Rm. Edi Mulyono, SJ</li>
-                    <li>Rm. Wawan Setiadi, SJ</li>
-                    <li>Rm. Agung, OFM</li>
-                    <li>Rm. Nani Kartiba, Pr</li>
-                  </ol>
-                </td>
-              </tr>
-
-              <!-- Rabu, 09 Desember 2026 -->
-<!--              <tr>
-                <td class="date-cell">Rabu - 09 Desember 2026</td>
-                <td>
-                  <ol class="priest-list">
-                    <li>Rm. Maharsono, SJ</li>
-                    <li>Rm. Deodatus, SJ</li>
-                    <li>Rm. Teguh, MSC</li>
-                    <li>Rm. Haberlubun, MSC</li>
-                    <li>Rm. Yongki Wawo, MSC</li>
-                    <li>Rm. Simon M, MSC</li>
-                    <li>Rm. Jhony, MSC</li>
-                    <li>Rm. Grasius, SVD</li>
-                  </ol>
-                </td>
-              </tr>
-
-              <!-- Kamis, 10 Desember 2026 -->
-<!--              <tr>
-                <td class="date-cell">Kamis - 10 Desember 2026</td>
-                <td>
-                  <ol class="priest-list">
-                    <li>Rm. Maharsono, SJ</li>
-                    <li>Rm. Deodatus, SJ</li>
-                    <li>Rm. Teguh, MSC</li>
-                    <li>Rm. Theo, CP</li>
-                    <li>Rm. Yongki Wawo, MSC</li>
-                    <li>Rm. Simon M, MSC</li>
-                    <li>Rm. Jhony, MSC</li>
-                    <li>Rm. Edi Mulyono, SJ</li>
-                    <li>Rm. Grasius, SVD</li>
-                    <li>Rm. Agung, OFM</li>
-                  </ol>
-                </td>
-              </tr>
-
-            <!-- Jumat, 11 Desember 2026 -->
-<!--              <tr>
-                <td class="date-cell">Jumat - 11 Desember 2026</td>
-                <td>
-                  <ol class="priest-list">
-                    <li>Rm. Maharsono, SJ</li>
-                    <li>Rm. Deodatus, SJ</li>
-                    <li>Rm. Teguh, MSC</li>
-                    <li>Rm. Theo, CP</li>
-                    <li>Rm. Haberlubun, MSC</li>
-                    <li>Rm. Yongki Wawo, MSC</li>
-                    <li>Rm. Simon M, MSC</li>
-                    <li>Rm. Jhony, MSC</li>
-                    <li>Rm. Grasius, SVD</li>
-                    <li>Rm. Agung, OFM</li>
-                  </ol>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-
+    <!-- Tabel Jadwal -->
+    <div class="schedule-section">
+      <div class="table-responsive">
+        <table>
+          <thead>
 
 
     <!-- Footer -->
